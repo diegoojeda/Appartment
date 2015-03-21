@@ -2,7 +2,7 @@ package com.uma.tfg.appartment.network.management;
 
 import android.os.AsyncTask;
 
-import com.uma.tfg.appartment.Util.Logger;
+import com.uma.tfg.appartment.util.Logger;
 import com.uma.tfg.appartment.network.model.GetRequest;
 import com.uma.tfg.appartment.network.model.Request;
 import com.uma.tfg.appartment.network.model.PostRequest;

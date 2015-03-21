@@ -1,6 +1,6 @@
 package com.uma.tfg.appartment.network.management;
 
-import com.uma.tfg.appartment.Util.Logger;
+import com.uma.tfg.appartment.util.Logger;
 import com.uma.tfg.appartment.network.model.Request;
 
 import java.util.ArrayList;

@@ -3,7 +3,6 @@ package com.uma.tfg.appartment.network.model;
 import android.net.Uri;
 
 import com.uma.tfg.appartment.Constants;
-import com.uma.tfg.appartment.Util.Logger;
 
 import org.json.JSONException;
 import org.json.JSONObject;

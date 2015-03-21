@@ -1,4 +1,4 @@
-package com.uma.tfg.appartment.Util;
+package com.uma.tfg.appartment.util;
 
 import android.util.Log;
 
