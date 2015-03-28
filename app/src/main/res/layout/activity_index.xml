@@ -1,11 +1,76 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".Index">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/blue_sky">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/index_layout_no_content"
+        android:orientation="vertical">
 
-</RelativeLayout>
+        <com.uma.tfg.appartment.views.TypefacedTextView
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
+            android:padding="20dp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="false"
+            android:textSize="35sp"
+            android:text="Para comenzar crea un grupo con tus amigos"/>
+
+        <Button
+            android:id="@+id/create_first_group_button"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="¡Pulsa aquí!"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/index_layout"
+        android:orientation="vertical">
+
+        <com.uma.tfg.appartment.views.TypefacedTextView
+            android:gravity="center"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Mis grupos"/>
+
+        <ProgressBar
+            android:layout_gravity="center_horizontal"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:indeterminate="true"
+            android:id="@+id/loading_groups_spinner"/>
+
+        <ListView
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:id="@+id/my_groups_listview"/>
+
+        <Button
+            android:id="@+id/create_group_button"
+            android:layout_margin="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Crear nuevo grupo"/>
+
+    </LinearLayout>
+
+</LinearLayout>
+
+
+
