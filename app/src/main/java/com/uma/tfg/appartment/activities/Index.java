@@ -1,9 +1,13 @@
-package com.uma.tfg.appartment;
+package com.uma.tfg.appartment.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.uma.tfg.appartment.R;
+import com.uma.tfg.appartment.network.management.RequestsManager;
+import com.uma.tfg.appartment.network.requests.PruebaGet;
 
 
 public class Index extends Activity {
@@ -12,6 +16,8 @@ public class Index extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_index);
+        PruebaGet g = new PruebaGet();
+        RequestsManager.getInstance().queueRequest(g);
     }
 
     @Override
