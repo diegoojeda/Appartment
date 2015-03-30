@@ -9,14 +9,15 @@ import android.widget.TextView;
 import com.uma.tfg.appartment.R;
 import com.uma.tfg.appartment.model.Group;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GroupsListAdapter extends BaseAdapter {
 
     public List<Group> mGroupsList;
 
-    public GroupsListAdapter(List<Group> groupsList){
-        mGroupsList = groupsList;
+    public GroupsListAdapter(){
+        mGroupsList = new ArrayList<>();
     }
 
     @Override

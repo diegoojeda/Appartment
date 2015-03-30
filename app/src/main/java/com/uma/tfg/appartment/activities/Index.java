@@ -1,6 +1,7 @@
 package com.uma.tfg.appartment.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,13 +15,14 @@ import com.uma.tfg.appartment.adapters.GroupsListAdapter;
 import com.uma.tfg.appartment.model.Group;
 import com.uma.tfg.appartment.util.Logger;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Index extends Activity implements View.OnClickListener{
 
     //TODO Modificar nombres de actividades
+
+    private static final int REQUEST_CODE_CREATE_GROUP_ACTIVITY = 1001;
 
     private static final String KEY_SAVE_GROUPS_LIST = "Index.groupsList";
 
@@ -29,7 +31,7 @@ public class Index extends Activity implements View.OnClickListener{
 
     private ListView mMyGroupsListView;
 
-    private List<Group> mGroupsList;
+//    private List<Group> mGroupsList;
 
     private GroupsListAdapter mGroupsListAdapter;
 
@@ -40,7 +42,7 @@ public class Index extends Activity implements View.OnClickListener{
         initViews();
         if (savedInstanceState != null){
             if (savedInstanceState.containsKey(KEY_SAVE_GROUPS_LIST)){
-                mGroupsList = (ArrayList) savedInstanceState.getSerializable(KEY_SAVE_GROUPS_LIST);
+                mGroupsListAdapter.mGroupsList = (ArrayList) savedInstanceState.getSerializable(KEY_SAVE_GROUPS_LIST);
                 onGroupsLoaded();
             }
         }
@@ -48,10 +50,9 @@ public class Index extends Activity implements View.OnClickListener{
             loadUserGroups();
         }
 
-        mGroupsList = new ArrayList<>();
-        for (int i = 0; i<20; i++){
-            Group g = new Group(""+i, "nombre" + i);
-            mGroupsList.add(g);
+        for (int i = 0; i<5; i++){
+            Group g = new Group(""+i, "nombre" + i, new ArrayList<String>());
+            mGroupsListAdapter.mGroupsList.add(g);
         }
         onGroupsLoaded();//TODO Eliminar
 
@@ -69,7 +70,7 @@ public class Index extends Activity implements View.OnClickListener{
         mCreateGroupButton.setOnClickListener(this);
         mCreateFirstGroupButton.setOnClickListener(this);
 
-        mGroupsListAdapter = new GroupsListAdapter(mGroupsList);
+        mGroupsListAdapter = new GroupsListAdapter();
         mMyGroupsListView.setAdapter(mGroupsListAdapter);
 
         mMyGroupsListView.setOnItemClickListener(getOnGroupClickedListener());
@@ -91,14 +92,13 @@ public class Index extends Activity implements View.OnClickListener{
     }
 
     private void onGroupsLoaded() {
-        if (mGroupsList != null){
-            if (mGroupsList.isEmpty()){
+        if (mGroupsListAdapter.mGroupsList != null){
+            if (mGroupsListAdapter.mGroupsList.isEmpty()){
                 showEmptyGroupsListLayout();
             }
             else {
                 hideLoadingSpinnerAndShowGroupsList();
                 //No se comparte la lista entre la actividad y el adapter, no se por qué :(
-                mGroupsListAdapter.mGroupsList = mGroupsList;
                 mGroupsListAdapter.notifyDataSetChanged();
             }
         }
@@ -107,11 +107,16 @@ public class Index extends Activity implements View.OnClickListener{
         }
     }
 
+    private void addNewGroupToList(Group g){
+        mGroupsListAdapter.mGroupsList.add(g);
+        mGroupsListAdapter.notifyDataSetChanged();
+    }
+
     private AdapterView.OnItemClickListener getOnGroupClickedListener() {
         return new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Logger.d("Clickado grupo en posición: " + position + " con id: " + mGroupsList.get(position).mId);
+                Logger.d("Clickado grupo en posición: " + position + " con id: " + mGroupsListAdapter.mGroupsList.get(position).mId);
             }
         };
     }
@@ -130,6 +135,22 @@ public class Index extends Activity implements View.OnClickListener{
 
     private void goToCreateGroupActivity() {
         //TODO
+        Intent i = new Intent(this, CreateGroupActivity.class);
+        startActivityForResult(i, REQUEST_CODE_CREATE_GROUP_ACTIVITY);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_CREATE_GROUP_ACTIVITY){
+            if (resultCode == RESULT_OK){
+                String groupName = data.getStringExtra(CreateGroupActivity.EXTRA_GROUP_NAME_RESULT);
+                ArrayList<String> groupEmails = data.getStringArrayListExtra(CreateGroupActivity.EXTRA_EMAIL_LIST_RESULT);
+                Group createdGroup = new Group("0", groupName, groupEmails);//TODO Sustituir "0" por el id del grupo una vez creado
+                Logger.d("Se creó el grupo: " + createdGroup.mId);
+                addNewGroupToList(createdGroup);
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -157,6 +178,6 @@ public class Index extends Activity implements View.OnClickListener{
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(KEY_SAVE_GROUPS_LIST, new ArrayList(mGroupsList));
+        outState.putSerializable(KEY_SAVE_GROUPS_LIST, new ArrayList<>(mGroupsListAdapter.mGroupsList));
     }
 }

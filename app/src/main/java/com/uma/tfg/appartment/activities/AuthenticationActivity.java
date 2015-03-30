@@ -94,7 +94,7 @@ public class AuthenticationActivity extends Activity implements GoogleApiClient.
 
     @Override
     public void onConnectionFailed(ConnectionResult result) {
-        Logger.w("Ha fallado la conexión. Se intenta recuperar");
+        Logger.w("Ha fallado la conexión. Se intenta recuperar. " + result.toString());
         if (mResolvingError) {
             return;
         } else if (result.hasResolution()) {

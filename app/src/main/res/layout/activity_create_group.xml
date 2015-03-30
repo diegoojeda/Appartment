@@ -6,6 +6,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+        <TextView
+            android:layout_margin="5dp"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="·Nombre del grupo: "/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nombre"
+            android:id="@+id/group_creation_name_edit_text"
+            />
+
+        <TextView
+            android:textSize="18sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Escribe a continuación los e-mail de los integrantes del grupo. \n(El tuyo no es necesario)"/>
+
+        <com.uma.tfg.appartment.views.MultiEmailAdderView
+            android:id="@+id/multi_email_adder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 

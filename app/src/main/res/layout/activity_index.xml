@@ -2,8 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/blue_sky">
+    android:orientation="vertical">
 
     <LinearLayout
         android:visibility="gone"
@@ -14,14 +13,15 @@
 
         <com.uma.tfg.appartment.views.TypefacedTextView
             android:layout_marginTop="30dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="10dp"
             android:padding="20dp"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="false"
             android:textSize="35sp"
-            android:text="Para comenzar crea un grupo con tus amigos"/>
+            android:text="Vaya, parece que aún no has creado ningún grupo.
+            \n¡Empieza creando uno e invitando a tus amigos!"/>
 
         <Button
             android:id="@+id/create_first_group_button"
