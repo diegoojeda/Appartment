@@ -4,4 +4,5 @@
     <item name="blue_sky" type="color">#CCFFFF</item>
     <item name="darker_blue" type="color">#44BBFF</item>
     <item name="skin_color" type="color">#FFCD94</item>
+    <item name="transparent" type="color">#00FFFFFF</item>
 </resources>

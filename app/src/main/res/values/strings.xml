@@ -6,5 +6,5 @@
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_authentication">AuthenticationActivity</string>
     <string name="title_activity_create_group">CreateGroupActivity</string>
-    <string name="crash_toast_text">Enviado informe de error</string>
+    <string name="crash_toast_text">Hubo un error. \nSe ha enviado un informe a los desarrolladores</string>
 </resources>

@@ -18,5 +18,7 @@ public class AppartmentApp extends Application {
         public void onCreate() {
                 super.onCreate();
                 ACRA.init(this);
+                //TODO Poner esto a 0 cuando se salga a producción
+                ACRA.getErrorReporter().putCustomData("TRACEPOT_DEVELOP_MODE", "1");//LLegarán los crashes a "develop" en tracepot
         }
 }

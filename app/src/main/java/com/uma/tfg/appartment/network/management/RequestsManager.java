@@ -25,7 +25,7 @@ public class RequestsManager implements SendHttpRequestTask.HttpResponseListener
 
     public void queueRequest(Request request){
         requestsList.add(request);
-        sendRequest(request);
+        sendNextRequest();
     }
 
     public Request deQueueRequest(){
@@ -47,6 +47,13 @@ public class RequestsManager implements SendHttpRequestTask.HttpResponseListener
         }
     }
 
+    private void sendNextRequest() {
+        if (!requestsList.isEmpty()){
+            Request request = deQueueRequest();
+            sendRequest(request);
+        }
+    }
+
     private void sendRequest(Request request) {
         SendHttpRequestTask task = new SendHttpRequestTask(request, this);
         task.execute();
@@ -54,6 +61,7 @@ public class RequestsManager implements SendHttpRequestTask.HttpResponseListener
 
     @Override
     public void onResponseReceived(String response) {
-
+        //TODO Procesamiento respuesta
+        sendNextRequest();
     }
 }
