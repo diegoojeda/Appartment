@@ -3,6 +3,9 @@ package com.uma.tfg.appartment.network.management;
 import com.uma.tfg.appartment.util.Logger;
 import com.uma.tfg.appartment.network.model.Request;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +14,8 @@ public class RequestsManager implements SendHttpRequestTask.HttpResponseListener
     private static RequestsManager sharedInstance;
 
     private List<Request> requestsList;
+
+    private Request currentRequest;
 
     public static RequestsManager getInstance() {
         if (sharedInstance == null){
@@ -49,8 +54,8 @@ public class RequestsManager implements SendHttpRequestTask.HttpResponseListener
 
     private void sendNextRequest() {
         if (!requestsList.isEmpty()){
-            Request request = deQueueRequest();
-            sendRequest(request);
+            currentRequest = deQueueRequest();
+            sendRequest(currentRequest);
         }
     }
 
@@ -59,9 +64,22 @@ public class RequestsManager implements SendHttpRequestTask.HttpResponseListener
         task.execute();
     }
 
+    //Se recibe el JSON con la respuesta de la petición, se procesa y se manejan errores
     @Override
     public void onResponseReceived(String response) {
         //TODO Procesamiento respuesta
+        try{
+            JSONObject jsonResponse = new JSONObject(response);
+            //Comunicación con el server OK
+            int responseCode = jsonResponse.getInt("rc");
+            if (responseCode == -10) {
+                //TODO Session expired. Reordenar cola peticiones y mandar ini de nuevo
+            }
+            currentRequest.processResponse(jsonResponse);
+        }
+        catch (JSONException ex){
+            ex.printStackTrace();
+        }
         sendNextRequest();
     }
 }

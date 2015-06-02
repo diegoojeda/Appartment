@@ -14,19 +14,20 @@ public abstract class PostRequest extends Request {
 
     public abstract List<NameValuePair> getPostParameters();
 
+    public abstract String getAction();
+
     @Override
     public String toString() {
         StringBuilder postRequestString = new StringBuilder(super.toString());
         if (getPostParameters() != null) {
-            postRequestString.append("Parámetros POST: ");
             for (NameValuePair parameter : getPostParameters()) {
-                postRequestString.append("name: ");
                 postRequestString.append(parameter.getName());
-                postRequestString.append("\nvalue: ");
+                postRequestString.append(" : ");
                 postRequestString.append(parameter.getValue());
                 postRequestString.append("\n");
             }
-            postRequestString.append("\n");
+            postRequestString.append("action : ") ;
+            postRequestString.append(getAction());
         }
         return postRequestString.toString();
     }
