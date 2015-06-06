@@ -11,6 +11,7 @@ import com.uma.tfg.appartment.network.model.PostRequest;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.HttpVersion;
 import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
@@ -19,6 +20,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.CoreProtocolPNames;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -46,6 +48,9 @@ public class SendHttpRequestTask extends AsyncTask<Void, Void, String>{
     protected String doInBackground(Void... params) {
         if (mRequest != null) {
             HttpClient httpclient = new DefaultHttpClient();
+//            httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
+//            httpclient.getParams().setParameter(CoreProtocolPNames.HTTP_ELEMENT_CHARSET, "iso-8859-1");
+
             HttpResponse response = null;
             String responseString = null;
 
@@ -101,7 +106,7 @@ public class SendHttpRequestTask extends AsyncTask<Void, Void, String>{
             List<NameValuePair> postArguments = new ArrayList<>();
             postArguments.addAll(req.getPostParameters());
             postArguments.add(new BasicNameValuePair("action", req.getAction()));
-            httpPostRequest.setEntity(new UrlEncodedFormEntity(postArguments));
+            httpPostRequest.setEntity(new UrlEncodedFormEntity(postArguments, "UTF-8"));
             return httpPostRequest;
         }
         return null;

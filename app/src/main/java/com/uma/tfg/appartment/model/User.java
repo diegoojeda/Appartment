@@ -1,5 +1,8 @@
 package com.uma.tfg.appartment.model;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 
 public class User implements Serializable {
@@ -14,6 +17,18 @@ public class User implements Serializable {
         this.userEmail = userEmail;
         this.userName = userName;
         this.userPictureUrl = userPictureUrl;
+    }
+
+    public User(JSONObject userJSON){
+        try{
+            this.userId = userJSON.getString("id");
+            this.userEmail = userJSON.getString("email");
+            this.userName = userJSON.getString("name");
+            this.userPictureUrl = userJSON.getString("picture");
+        }
+        catch (JSONException ex){
+            ex.printStackTrace();
+        }
     }
 
     @Override

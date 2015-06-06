@@ -13,12 +13,15 @@ import android.widget.ListView;
 import com.uma.tfg.appartment.R;
 import com.uma.tfg.appartment.adapters.GroupsListAdapter;
 import com.uma.tfg.appartment.model.Group;
+import com.uma.tfg.appartment.network.management.RequestsBuilder;
+import com.uma.tfg.appartment.network.requests.groups.GroupsGet;
 import com.uma.tfg.appartment.util.Logger;
+import com.uma.tfg.appartment.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Index extends Activity implements View.OnClickListener{
+public class Index extends Activity implements View.OnClickListener, GroupsGet.GroupsGetListener{
 
     //TODO Modificar nombres de actividades
 
@@ -31,7 +34,7 @@ public class Index extends Activity implements View.OnClickListener{
 
     private ListView mMyGroupsListView;
 
-//    private List<Group> mGroupsList;
+    private List<Group> mGroupsList;
 
     private GroupsListAdapter mGroupsListAdapter;
 
@@ -49,17 +52,18 @@ public class Index extends Activity implements View.OnClickListener{
         else{
             loadUserGroups();
         }
-
-        for (int i = 0; i<5; i++){
-            Group g = new Group(""+i, "nombre" + i, new ArrayList<String>());
-            mGroupsListAdapter.mGroupsList.add(g);
-        }
-        onGroupsLoaded();//TODO Eliminar
+//
+//        for (int i = 0; i<5; i++){
+//            Group g = new Group(""+i, "nombre" + i, new ArrayList<String>());
+//            mGroupsListAdapter.mGroupsList.add(g);
+//        }
+//        onGroupsLoaded();//TODO Eliminar
 
     }
 
     private void loadUserGroups() {
         //TODO Comunicación server. LLamar a onGroupsLoaded en callback
+        RequestsBuilder.sendGroupsGetRequest(this);
     }
 
     private void initViews() {
@@ -143,41 +147,32 @@ public class Index extends Activity implements View.OnClickListener{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_CREATE_GROUP_ACTIVITY){
             if (resultCode == RESULT_OK){
-                String groupName = data.getStringExtra(CreateGroupActivity.EXTRA_GROUP_NAME_RESULT);
-                ArrayList<String> groupEmails = data.getStringArrayListExtra(CreateGroupActivity.EXTRA_EMAIL_LIST_RESULT);
-                Group createdGroup = new Group("0", groupName, groupEmails);//TODO Sustituir "0" por el id del grupo una vez creado
-                Logger.d("Se creó el grupo: " + createdGroup.mId);
-                addNewGroupToList(createdGroup);
+//                String groupName = data.getStringExtra(CreateGroupActivity.EXTRA_GROUP_NAME_RESULT);
+//                ArrayList<String> groupEmails = data.getStringArrayListExtra(CreateGroupActivity.EXTRA_EMAIL_LIST_RESULT);
+//                Group createdGroup = new Group("0", groupName, groupEmails);//TODO Sustituir "0" por el id del grupo una vez creado
+//                Logger.d("Se creó el grupo: " + createdGroup.mId);
+//                addNewGroupToList(createdGroup);
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_index, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(KEY_SAVE_GROUPS_LIST, new ArrayList<>(mGroupsListAdapter.mGroupsList));
+    }
+
+    @Override
+    public void onGroupsReceivedSuccessfully(List<Group> groups) {
+        this.mGroupsList = groups;
+        onGroupsLoaded();
+        Logger.d("Grupos recibidos satisfactoriamente");
+    }
+
+    @Override
+    public void onErrorReceivingGroups() {
+        Util.toast(this, "Hubo un error con los grupos");
+        Logger.e("Error al recibir los grupos del usuario");
     }
 }

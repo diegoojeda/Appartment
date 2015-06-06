@@ -1,4 +1,4 @@
-package com.uma.tfg.appartment.network.requests;
+package com.uma.tfg.appartment.network.requests.user;
 
 import com.uma.tfg.appartment.network.model.PostRequest;
 
@@ -47,8 +47,7 @@ public class LoginPost extends PostRequest {
         arguments.add(new BasicNameValuePair("id", mUserId));
         arguments.add(new BasicNameValuePair("lang", Locale.getDefault().toString()));
         //TODO
-//        arguments.add(new BasicNameValuePair("name", mUserName));
-        arguments.add(new BasicNameValuePair("name", "Diego Ojeda"));
+        arguments.add(new BasicNameValuePair("name", mUserName));
         arguments.add(new BasicNameValuePair("email", mUserEmail));
 
         return arguments;

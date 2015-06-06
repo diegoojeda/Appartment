@@ -1,7 +1,8 @@
 package com.uma.tfg.appartment.network.management;
 
 import com.uma.tfg.appartment.network.requests.IniPost;
-import com.uma.tfg.appartment.network.requests.LoginPost;
+import com.uma.tfg.appartment.network.requests.groups.GroupsGet;
+import com.uma.tfg.appartment.network.requests.user.LoginPost;
 
 public class RequestsBuilder {
 
@@ -15,4 +16,9 @@ public class RequestsBuilder {
         RequestsManager.getInstance().queueRequest(request);
     }
 
+    public static void sendGroupsGetRequest(GroupsGet.GroupsGetListener listener){
+        GroupsGet request = new GroupsGet(listener);
+        RequestsManager.getInstance().queueRequest(request);
+
+    }
 }

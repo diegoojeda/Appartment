@@ -61,20 +61,21 @@ import java.util.List;
  // UPDATE USER -> 'http://appartment-pruebamarja.rhcloud.com/user/?session_id=234434234324'; Y action => update
  // INSERT GROUP -> 'http://appartment-pruebamarja.rhcloud.com/group/?session_id=234434234324' action => insert Y name
  // UPDATE GROUP -> 'http://appartment-pruebamarja.rhcloud.com/group/?session_id=234434234324' Y action => update Y type => group Y idgroup
- // GET GROUP -> 'http://appartment-pruebamarja.rhcloud.com/group/?session_id=234434234324'
- // INVITE GROUP -> 'http://appartment-pruebamarja.rhcloud.com/utils/?session_id=234434234324'  Y action => invite Y emails => array() Y idgroup Y group_name
- // ADD NEWMEMBER -> 'http://appartment-pruebamarja.rhcloud.com/group/?session_id=234434234324' Y action => update Y type => umember Y hash
+ // GET GROUPS -> 'http://appartment-pruebamarja.rhcloud.com/group/?session_id=234434234324'
+ // GET GROUP -> 'http://appartment-pruebamarja.rhcloud.com/group/id_grupo/?session_id=234434234324'
+ // INVITE GROUP -> 'http://appartment-pruebamarja.rhcloud.com/group/?session_id=234434234324'  Y action => invite Y emails => array() Y idgroup Y group_name
+ // ADD NEWMEMBER -> 'http://appartment-pruebamarja.rhcloud.com/group/id_grupo(sacado de referee)/?session_id=234434234324' Y action => update Y type => umember
  // ADD REGISTEREDMEMBER -> 'http://appartment-pruebamarja.rhcloud.com/group/?session_id=234434234324' Y action => update Y type => rmember Y namegroup Y idgroup Y array => ids
- // DELETE MEMBER -> 'http://appartment-pruebamarja.rhcloud.com/group/?session_id=234434234324' Y action => update Y type => dmember Y idgroup Y namegroup
- // DELETE group -> 'http://appartment-pruebamarja.rhcloud.com/group/?session_id=234434234324' Y action => delete Y idgroup
+ // DELETE MEMBER -> 'http://appartment-pruebamarja.rhcloud.com/group/id_grupo?session_id=234434234324' Y action => update Y type => dmember
+ // DELETE group -> 'http://appartment-pruebamarja.rhcloud.com/group/id_grupo?session_id=234434234324' Y action => delete
  // GET ALL FRIENDS -> 'http://appartment-pruebamarja.rhcloud.com/user/?session_id=234434234324' Y type => friends
- // GET GROUP FRIENDS -> 'http://appartment-pruebamarja.rhcloud.com/user/?session_id=234434234324' Y type => members Y idgroup
+ // (Por ahora no)GET GROUP FRIENDS -> 'http://appartment-pruebamarja.rhcloud.com/user/?session_id=234434234324' Y type => members Y idgroup
  // INSERT receipt -> 'http://appartment-pruebamarja.rhcloud.com/receipt/?session_id=234434234324' Y action => insert Y idgroup Y amount Y debtors => array() Y namereceipt
- // GET  RECEIPT -> 'http://appartment-pruebamarja.rhcloud.com/receipt/?session_id=234434234324' Y type => receipts y idreceipt
- // GET GROUP RECEIPT -> 'http://appartment-pruebamarja.rhcloud.com/receipt/?session_id=234434234324' Y type => group_receipts Y idgroup
- // UPDATE CREDITORS RECEIPT -> 'http://appartment-pruebamarja.rhcloud.com/receipt/?session_id=234434234324' Y action => update Y type => debtors Y receipt
- // UPDATE  RECEIPT -> 'http://appartment-pruebamarja.rhcloud.com/receipt/?session_id=234434234324' Y action => update Y type => receipt Y idreceipt
- // DELETE  RECEIPT -> 'http://appartment-pruebamarja.rhcloud.com/receipt/?session_id=234434234324' Y action => delete Y receipt
+ // GET  RECEIPT -> 'http://appartment-pruebamarja.rhcloud.com/receipt/id_recibo/?session_id=234434234324'
+ // GET GROUP RECEIPT -> 'http://appartment-pruebamarja.rhcloud.com/receipt/?session_id=234434234324&id_group=id'
+ // UPDATE CREDITORS RECEIPT -> 'http://appartment-pruebamarja.rhcloud.com/receipt/id_recibo/?session_id=234434234324' Y action => update Y type => debtors
+ // UPDATE  RECEIPT -> 'http://appartment-pruebamarja.rhcloud.com/receipt/id_recibo/?session_id=234434234324' Y action => update Y type => receipt Y name => nuevo_nombre
+ // DELETE  RECEIPT -> 'http://appartment-pruebamarja.rhcloud.com/receipt/id_recibo/?session_id=234434234324' Y action => delete
 * */
 public abstract class Request {
 
@@ -85,7 +86,8 @@ public abstract class Request {
 
     public enum Entity{
         INI("ini"),
-        USER("user");
+        USER("user"),
+        GROUP("group");
 
         private String mEntityString;
 

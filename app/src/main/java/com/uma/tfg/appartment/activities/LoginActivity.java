@@ -13,7 +13,7 @@ import com.uma.tfg.appartment.AppartmentSharedPreferences;
 import com.uma.tfg.appartment.R;
 import com.uma.tfg.appartment.network.management.RequestsBuilder;
 import com.uma.tfg.appartment.network.requests.IniPost;
-import com.uma.tfg.appartment.network.requests.LoginPost;
+import com.uma.tfg.appartment.network.requests.user.LoginPost;
 import com.uma.tfg.appartment.util.Logger;
 import com.uma.tfg.appartment.model.User;
 import com.uma.tfg.appartment.util.Util;
