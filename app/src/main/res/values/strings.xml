@@ -7,4 +7,5 @@
     <string name="title_activity_authentication">AuthenticationActivity</string>
     <string name="title_activity_create_group">CreateGroupActivity</string>
     <string name="crash_toast_text">Hubo un error. \nSe ha enviado un informe a los desarrolladores</string>
+    <string name="title_activity_group_details">GroupDetailsActivity</string>
 </resources>

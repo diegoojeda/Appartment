@@ -1,5 +1,7 @@
 package com.uma.tfg.appartment.model;
 
+import com.uma.tfg.appartment.util.JSONUtils;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,25 +18,20 @@ public class Group implements Serializable {
 
     public String mCreatorId;
 
-    public List<String> mMembersIds;
+    public List<String> mMembers;
 
     public Group (JSONObject jsonGroup){
-        try {
-            mId = jsonGroup.getString("_id");
-            mGroupName = jsonGroup.getString("name");
-            mCdt = jsonGroup.getString("cdt");
-            mCreatorId = jsonGroup.getString("creator");
+        mId = JSONUtils.getStringFromJSONObject("id", jsonGroup);
+        mGroupName = JSONUtils.getStringFromJSONObject("name", jsonGroup);
+        mCdt = JSONUtils.getStringFromJSONObject("cdt", jsonGroup);
+        mCreatorId = JSONUtils.getStringFromJSONObject("creator", jsonGroup);
 
-            if (jsonGroup.has("members")){
-                mMembersIds = new ArrayList<>();
-                JSONArray membersJSONArray = jsonGroup.getJSONArray("members");
-                for (int i = 0; i<membersJSONArray.length(); i++){
-                    mMembersIds.add(membersJSONArray.getString(i));
-                }
+        JSONArray membersJSONArray = JSONUtils.getJSONArrayFromJSONObject("members", jsonGroup);
+        if (membersJSONArray != null) {
+            mMembers = new ArrayList<>();
+            for (int i = 0; i < membersJSONArray.length(); i++) {
+                mMembers.add(JSONUtils.getStringFromJSONArray(membersJSONArray, i));
             }
-        }
-        catch(JSONException ex){
-            ex.printStackTrace();
         }
     }
 
@@ -42,7 +39,7 @@ public class Group implements Serializable {
         mId = id;
         mGroupName = groupName;
         mCreatorId = creatorId;
-        mMembersIds = groupMembers;
+        mMembers = groupMembers;
     }
 
 }

@@ -74,8 +74,8 @@ public class IniPost extends PostRequest {
     }
 
     @Override
-    public String getEntity() {
-        return Entity.INI.toString();
+    public Entity getEntity() {
+        return Entity.INI;
     }
 
     @Override

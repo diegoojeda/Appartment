@@ -16,6 +16,7 @@ import com.uma.tfg.appartment.R;
 import com.uma.tfg.appartment.adapters.GroupsListAdapter;
 import com.uma.tfg.appartment.model.Group;
 import com.uma.tfg.appartment.network.management.RequestsBuilder;
+import com.uma.tfg.appartment.network.management.RequestsManager;
 import com.uma.tfg.appartment.network.requests.groups.GroupsGet;
 import com.uma.tfg.appartment.network.requests.groups.GroupsPost;
 import com.uma.tfg.appartment.util.Logger;
@@ -129,18 +130,16 @@ public class IndexActivity extends Activity implements View.OnClickListener, Gro
                 if (touchListener.existPendingDismisses()) {
                     touchListener.undoPendingDismiss();
                 } else {
-                    Util.toast(IndexActivity.this, "Position" + position);
+                    goToGroupDetailsActivity(mGroupsListAdapter.mGroupsList.get(position));
                 }
             }
         });
+    }
 
-
-//        return new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Logger.d("Clickado grupo en posición: " + position + " con id: " + mGroupsListAdapter.mGroupsList.get(position).mId);
-//            }
-//        };
+    private void goToGroupDetailsActivity(Group selectedGroup){
+        Intent i = new Intent(IndexActivity.this, GroupDetailsActivity.class);
+        i.putExtra(GroupDetailsActivity.EXTRA_GROUP, selectedGroup);
+        startActivity(i);
     }
 
     @Override

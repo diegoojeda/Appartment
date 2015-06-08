@@ -26,8 +26,8 @@ public class GroupsGet extends GetRequest {
     }
 
     @Override
-    public String getEntity() {
-        return Entity.GROUP.toString();
+    public Entity getEntity() {
+        return Entity.GROUP;
     }
 
     @Override
@@ -45,14 +45,16 @@ public class GroupsGet extends GetRequest {
         boolean failed = true;
         int rc = response.getInt("rc");
         if (rc == 0){
-            failed = false;
-            List<Group> groupsList = new ArrayList<>();
-            JSONArray groupsJSONArray = response.getJSONArray("groups");
-            for (int i = 0; i<groupsJSONArray.length(); i++){
-                groupsList.add(new Group(groupsJSONArray.getJSONObject(i)));
-            }
-            if (mListener != null){
-                mListener.onGroupsReceivedSuccessfully(groupsList);
+            if (response.has("groups")) {
+                failed = false;
+                List<Group> groupsList = new ArrayList<>();
+                JSONArray groupsJSONArray = response.getJSONArray("groups");
+                for (int i = 0; i < groupsJSONArray.length(); i++) {
+                    groupsList.add(new Group(groupsJSONArray.getJSONObject(i)));
+                }
+                if (mListener != null) {
+                    mListener.onGroupsReceivedSuccessfully(groupsList);
+                }
             }
         }
         if (mListener != null) {

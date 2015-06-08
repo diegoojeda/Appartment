@@ -87,7 +87,8 @@ public abstract class Request {
     public enum Entity{
         INI("ini"),
         USER("user"),
-        GROUP("group");
+        GROUP("group"),
+        RECEIPT("receipt");
 
         private String mEntityString;
 
@@ -100,7 +101,7 @@ public abstract class Request {
         }
     }
 
-    public abstract String getEntity();
+    public abstract Entity getEntity();
 
     public abstract HttpMethod getHttpMethod();
 
@@ -114,7 +115,7 @@ public abstract class Request {
         uriBuilder.authority(Constants.SERVER_URL);
 
         if (getEntity() != null) {
-            uriBuilder.appendPath(getEntity());
+            uriBuilder.appendPath(getEntity().toString());
         }
 
         if (getUrlPath() != null) {
