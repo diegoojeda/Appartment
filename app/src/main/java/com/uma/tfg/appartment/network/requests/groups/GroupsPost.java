@@ -1,5 +1,8 @@
 package com.uma.tfg.appartment.network.requests.groups;
 
+import android.text.TextUtils;
+
+import com.uma.tfg.appartment.model.Group;
 import com.uma.tfg.appartment.network.model.PostRequest;
 
 import org.apache.http.NameValuePair;
@@ -12,16 +15,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 // INSERT GROUP -> 'http://appartment-pruebamarja.rhcloud.com/group/?session_id=234434234324' action => insert Y name
-// INVITE GROUP -> 'http://appartment-pruebamarja.rhcloud.com/utils/?session_id=234434234324'  Y action => invite Y emails => array() Y idgroup Y group_name
-// El update no se para que sirve
-// UPDATE GROUP -> 'http://appartment-pruebamarja.rhcloud.com/group/?session_id=234434234324' Y action => update Y type => group Y idgroup
+// UPDATE GROUP -> 'http://appartment-pruebamarja.rhcloud.com/group/group_id?session_id=234434234324' Y action => update Y name => nombre nuevo
+// INVITE GROUP -> 'http://appartment-pruebamarja.rhcloud.com/group/group_id?session_id=234434234324'  Y action => invite Y emails => array()
+// DELETE group -> 'http://appartment-pruebamarja.rhcloud.com/group/id_grupo?session_id=234434234324' Y action => delete
 
 public class GroupsPost extends PostRequest {
+
+    public interface GroupsPostListener{
+        void onGroupsPostSuccess(GroupsPostAction action, Group modifiedGroup);
+        void onGroupsPostError();
+    }
 
     public enum GroupsPostAction {
         INSERT("insert"),
         INVITE("invite"),
-        UPDATE("update");
+        UPDATE("update"),
+        DELETE("delete");
 
         private String action;
 
@@ -34,27 +43,31 @@ public class GroupsPost extends PostRequest {
         }
     }
 
-    public enum GroupsUpdate {
-
-        GROUP("group"),
-        //TODO
-        GROUP_MEMBERS("");
-
-        private String type;
-
-        GroupsUpdate(String type){
-            this.type = type;
-        }
-
-        public String toString() {
-            return type;
-        }
-    }
+//TODO Por ahora no se usa
+//
+//    public enum GroupsUpdate {
+//
+//        GROUP("group"),
+//        //TODO
+//        GROUP_MEMBERS("");
+//
+//        private String type;
+//
+//        GroupsUpdate(String type){
+//            this.type = type;
+//        }
+//
+//        public String toString() {
+//            return type;
+//        }
+//    }
 
     private GroupsPostAction mAction;
     public String mName;
     public String mId;
     public List<String> mEmails;
+
+    public GroupsPostListener mListener;
 
     public GroupsPost(GroupsPostAction action){
         this.mAction = action;
@@ -91,9 +104,15 @@ public class GroupsPost extends PostRequest {
 
     @Override
     public List<String> getUrlPath() {
-        List<String> urlPath = new ArrayList<>();
-        urlPath.add(mId);
-        return urlPath;
+        if (mAction == GroupsPostAction.INVITE || mAction == GroupsPostAction.UPDATE
+                || mAction == GroupsPostAction.DELETE){
+            if (!TextUtils.isEmpty(mId)) {
+                List<String> urlPath = new ArrayList<>();
+                urlPath.add(mId);
+                return urlPath;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -103,6 +122,24 @@ public class GroupsPost extends PostRequest {
 
     @Override
     public void processResponse(JSONObject response) throws JSONException {
+        boolean failed = true;
+        int rc = response.getInt("rc");
+        if (rc == 0){
+            failed = false;
+            Group g = null;
+            if (response.has("inserted")){
+                g = new Group(response.getJSONObject("inserted"));
+
+            }
+            if (mListener != null){
+                mListener.onGroupsPostSuccess(mAction, g);
+            }
+        }
+        if (mListener != null) {
+            if (failed) {
+                mListener.onGroupsPostError();
+            }
+        }
 
     }
 }

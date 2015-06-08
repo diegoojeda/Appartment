@@ -1,5 +1,5 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -23,13 +23,13 @@
             android:text="Vaya, parece que aún no has creado ningún grupo.
             \n¡Empieza creando uno e invitando a tus amigos!"/>
 
-        <Button
-            android:id="@+id/create_first_group_button"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="¡Pulsa aquí!"/>
+        <!--<Button-->
+            <!--android:id="@+id/create_first_group_button"-->
+            <!--android:layout_marginRight="20dp"-->
+            <!--android:layout_marginLeft="20dp"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="¡Pulsa aquí!"/>-->
     </LinearLayout>
 
     <LinearLayout
@@ -61,14 +61,29 @@
             android:layout_weight="1.0"
             android:id="@+id/my_groups_listview"/>
 
-        <Button
-            android:id="@+id/create_group_button"
-            android:layout_margin="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Crear nuevo grupo"/>
+        <!--<Button-->
+            <!--android:id="@+id/create_group_button"-->
+            <!--android:layout_margin="20dp"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Crear nuevo grupo"/>-->
 
     </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right">
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/create_new_group_button"
+            fab:fab_icon="@mipmap/ic_add_white_48dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="16dp"
+            />
+    </RelativeLayout>
 
 </LinearLayout>
 

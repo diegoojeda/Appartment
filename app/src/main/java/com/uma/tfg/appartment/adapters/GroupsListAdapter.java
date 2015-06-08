@@ -54,4 +54,9 @@ public class GroupsListAdapter extends BaseAdapter {
         groupNameTextView.setText(item.mGroupName);
         return v;
     }
+
+    public void remove(int position) {
+        mGroupsList.remove(position);
+        this.notifyDataSetChanged();
+    }
 }

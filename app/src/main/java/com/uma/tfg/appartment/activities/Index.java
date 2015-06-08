@@ -3,25 +3,33 @@ package com.uma.tfg.appartment.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.hudomju.swipe.SwipeToDismissTouchListener;
+import com.hudomju.swipe.adapter.ListViewAdapter;
 import com.uma.tfg.appartment.R;
 import com.uma.tfg.appartment.adapters.GroupsListAdapter;
 import com.uma.tfg.appartment.model.Group;
 import com.uma.tfg.appartment.network.management.RequestsBuilder;
 import com.uma.tfg.appartment.network.requests.groups.GroupsGet;
+import com.uma.tfg.appartment.network.requests.groups.GroupsPost;
 import com.uma.tfg.appartment.util.Logger;
 import com.uma.tfg.appartment.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Index extends Activity implements View.OnClickListener, GroupsGet.GroupsGetListener{
+public class Index extends Activity implements View.OnClickListener, GroupsGet.GroupsGetListener,
+        GroupsPost.GroupsPostListener{
 
     //TODO Modificar nombres de actividades
 
@@ -29,12 +37,9 @@ public class Index extends Activity implements View.OnClickListener, GroupsGet.G
 
     private static final String KEY_SAVE_GROUPS_LIST = "Index.groupsList";
 
-    private Button mCreateGroupButton;
-    private Button mCreateFirstGroupButton;
+    private FloatingActionButton mCreateGroupButton;
 
     private ListView mMyGroupsListView;
-
-    private List<Group> mGroupsList;
 
     private GroupsListAdapter mGroupsListAdapter;
 
@@ -52,32 +57,22 @@ public class Index extends Activity implements View.OnClickListener, GroupsGet.G
         else{
             loadUserGroups();
         }
-//
-//        for (int i = 0; i<5; i++){
-//            Group g = new Group(""+i, "nombre" + i, new ArrayList<String>());
-//            mGroupsListAdapter.mGroupsList.add(g);
-//        }
-//        onGroupsLoaded();//TODO Eliminar
-
     }
 
     private void loadUserGroups() {
-        //TODO Comunicación server. LLamar a onGroupsLoaded en callback
         RequestsBuilder.sendGroupsGetRequest(this);
     }
 
     private void initViews() {
-        mCreateGroupButton = (Button) findViewById(R.id.create_group_button);
-        mCreateFirstGroupButton = (Button) findViewById(R.id.create_first_group_button);
+        mCreateGroupButton = (FloatingActionButton) findViewById(R.id.create_new_group_button);
         mMyGroupsListView = (ListView) findViewById(R.id.my_groups_listview);
 
         mCreateGroupButton.setOnClickListener(this);
-        mCreateFirstGroupButton.setOnClickListener(this);
 
         mGroupsListAdapter = new GroupsListAdapter();
         mMyGroupsListView.setAdapter(mGroupsListAdapter);
 
-        mMyGroupsListView.setOnItemClickListener(getOnGroupClickedListener());
+        setOnGroupClickedListener();
     }
 
     private void showEmptyGroupsListLayout() {
@@ -102,7 +97,6 @@ public class Index extends Activity implements View.OnClickListener, GroupsGet.G
             }
             else {
                 hideLoadingSpinnerAndShowGroupsList();
-                //No se comparte la lista entre la actividad y el adapter, no se por qué :(
                 mGroupsListAdapter.notifyDataSetChanged();
             }
         }
@@ -116,22 +110,47 @@ public class Index extends Activity implements View.OnClickListener, GroupsGet.G
         mGroupsListAdapter.notifyDataSetChanged();
     }
 
-    private AdapterView.OnItemClickListener getOnGroupClickedListener() {
-        return new AdapterView.OnItemClickListener() {
+    private void setOnGroupClickedListener() {
+        final SwipeToDismissTouchListener<ListViewAdapter> touchListener = new SwipeToDismissTouchListener<>(
+            new ListViewAdapter(mMyGroupsListView),
+            new SwipeToDismissTouchListener.DismissCallbacks<ListViewAdapter>() {
+                @Override
+                public boolean canDismiss(int position) {
+                    return true;
+                }
+
+                @Override
+                public void onDismiss(ListViewAdapter view, int position) {
+                    RequestsBuilder.sendDeleteGroupRequest(mGroupsListAdapter.mGroupsList.get(position).mId, Index.this);
+                    mGroupsListAdapter.remove(position);
+                }
+            });
+        mMyGroupsListView.setOnTouchListener(touchListener);
+        mMyGroupsListView.setOnScrollListener((AbsListView.OnScrollListener) touchListener.makeScrollListener());
+        mMyGroupsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Logger.d("Clickado grupo en posición: " + position + " con id: " + mGroupsListAdapter.mGroupsList.get(position).mId);
+                if (touchListener.existPendingDismisses()) {
+                    touchListener.undoPendingDismiss();
+                } else {
+                    Util.toast(Index.this, "Position" + position);
+                }
             }
-        };
+        });
+
+
+//        return new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Logger.d("Clickado grupo en posición: " + position + " con id: " + mGroupsListAdapter.mGroupsList.get(position).mId);
+//            }
+//        };
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.create_group_button:
-                goToCreateGroupActivity();
-                break;
-            case R.id.create_first_group_button:
+            case R.id.create_new_group_button:
                 goToCreateGroupActivity();
                 break;
         }
@@ -147,32 +166,42 @@ public class Index extends Activity implements View.OnClickListener, GroupsGet.G
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_CREATE_GROUP_ACTIVITY){
             if (resultCode == RESULT_OK){
-//                String groupName = data.getStringExtra(CreateGroupActivity.EXTRA_GROUP_NAME_RESULT);
-//                ArrayList<String> groupEmails = data.getStringArrayListExtra(CreateGroupActivity.EXTRA_EMAIL_LIST_RESULT);
-//                Group createdGroup = new Group("0", groupName, groupEmails);//TODO Sustituir "0" por el id del grupo una vez creado
-//                Logger.d("Se creó el grupo: " + createdGroup.mId);
-//                addNewGroupToList(createdGroup);
+                Group newGroup = (Group) data.getSerializableExtra(CreateGroupActivity.EXTRA_GROUP_RESULT);
+                addNewGroupToList(newGroup);
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(KEY_SAVE_GROUPS_LIST, new ArrayList<>(mGroupsListAdapter.mGroupsList));
     }
 
     @Override
     public void onGroupsReceivedSuccessfully(List<Group> groups) {
-        this.mGroupsList = groups;
+//        this.mGroupsList = groups;
+        this.mGroupsListAdapter.mGroupsList = groups;
         onGroupsLoaded();
         Logger.d("Grupos recibidos satisfactoriamente");
     }
 
     @Override
     public void onErrorReceivingGroups() {
-        Util.toast(this, "Hubo un error con los grupos");
+        Util.toast(this, "Hubo un error al cargar los grupos");
         Logger.e("Error al recibir los grupos del usuario");
+    }
+
+    @Override
+    public void onGroupsPostSuccess(GroupsPost.GroupsPostAction action, Group modifiedGroup) {
+        if (action == GroupsPost.GroupsPostAction.DELETE){
+            Logger.d("Grupo borrado satisfactoriamente");
+        }
+    }
+
+    @Override
+    public void onGroupsPostError() {
+        Logger.e("Error en groups post");
     }
 }
