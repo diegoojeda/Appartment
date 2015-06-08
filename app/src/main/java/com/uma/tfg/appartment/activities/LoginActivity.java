@@ -136,7 +136,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,
 
     @Override
     public void onLoginPostSuccess() {
-        Intent i = new Intent(this, Index.class);
+        Intent i = new Intent(this, IndexActivity.class);
         startActivity(i);
     }
 

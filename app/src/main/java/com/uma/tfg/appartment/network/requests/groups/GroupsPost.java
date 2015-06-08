@@ -98,8 +98,8 @@ public class GroupsPost extends PostRequest {
     }
 
     @Override
-    public String getEntity() {
-        return Entity.GROUP.toString();
+    public Entity getEntity() {
+        return Entity.GROUP;
     }
 
     @Override

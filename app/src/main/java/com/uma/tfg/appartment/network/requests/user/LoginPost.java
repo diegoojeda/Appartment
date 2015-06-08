@@ -54,8 +54,8 @@ public class LoginPost extends PostRequest {
     }
 
     @Override
-    public String getEntity() {
-        return Entity.USER.toString();
+    public Entity getEntity() {
+        return Entity.USER;
     }
 
     @Override

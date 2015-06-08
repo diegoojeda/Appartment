@@ -4,14 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.hudomju.swipe.SwipeToDismissTouchListener;
@@ -20,6 +16,7 @@ import com.uma.tfg.appartment.R;
 import com.uma.tfg.appartment.adapters.GroupsListAdapter;
 import com.uma.tfg.appartment.model.Group;
 import com.uma.tfg.appartment.network.management.RequestsBuilder;
+import com.uma.tfg.appartment.network.management.RequestsManager;
 import com.uma.tfg.appartment.network.requests.groups.GroupsGet;
 import com.uma.tfg.appartment.network.requests.groups.GroupsPost;
 import com.uma.tfg.appartment.util.Logger;
@@ -28,14 +25,14 @@ import com.uma.tfg.appartment.util.Util;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Index extends Activity implements View.OnClickListener, GroupsGet.GroupsGetListener,
+public class IndexActivity extends Activity implements View.OnClickListener, GroupsGet.GroupsGetListener,
         GroupsPost.GroupsPostListener{
 
     //TODO Modificar nombres de actividades
 
     private static final int REQUEST_CODE_CREATE_GROUP_ACTIVITY = 1001;
 
-    private static final String KEY_SAVE_GROUPS_LIST = "Index.groupsList";
+    private static final String KEY_SAVE_GROUPS_LIST = "IndexActivity.groupsList";
 
     private FloatingActionButton mCreateGroupButton;
 
@@ -121,7 +118,7 @@ public class Index extends Activity implements View.OnClickListener, GroupsGet.G
 
                 @Override
                 public void onDismiss(ListViewAdapter view, int position) {
-                    RequestsBuilder.sendDeleteGroupRequest(mGroupsListAdapter.mGroupsList.get(position).mId, Index.this);
+                    RequestsBuilder.sendDeleteGroupRequest(mGroupsListAdapter.mGroupsList.get(position).mId, IndexActivity.this);
                     mGroupsListAdapter.remove(position);
                 }
             });
@@ -133,18 +130,16 @@ public class Index extends Activity implements View.OnClickListener, GroupsGet.G
                 if (touchListener.existPendingDismisses()) {
                     touchListener.undoPendingDismiss();
                 } else {
-                    Util.toast(Index.this, "Position" + position);
+                    goToGroupDetailsActivity(mGroupsListAdapter.mGroupsList.get(position));
                 }
             }
         });
+    }
 
-
-//        return new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Logger.d("Clickado grupo en posición: " + position + " con id: " + mGroupsListAdapter.mGroupsList.get(position).mId);
-//            }
-//        };
+    private void goToGroupDetailsActivity(Group selectedGroup){
+        Intent i = new Intent(IndexActivity.this, GroupDetailsActivity.class);
+        i.putExtra(GroupDetailsActivity.EXTRA_GROUP, selectedGroup);
+        startActivity(i);
     }
 
     @Override
