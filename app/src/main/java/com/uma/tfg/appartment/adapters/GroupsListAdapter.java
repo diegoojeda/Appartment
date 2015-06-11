@@ -47,10 +47,8 @@ public class GroupsListAdapter extends BaseAdapter {
 
         Group item = mGroupsList.get(position);
 
-        TextView groupIdTextView = (TextView) v.findViewById(R.id.group_id_textview);
-        TextView groupNameTextView = (TextView) v.findViewById(R.id.group_name_textview);
+        TextView groupNameTextView = (TextView) v.findViewById(R.id.group_name_textView);
 
-        groupIdTextView.setText(item.mId);
         groupNameTextView.setText(item.mGroupName);
         return v;
     }

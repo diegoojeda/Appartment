@@ -30,7 +30,9 @@ public class RequestsManager implements SendHttpRequestTask.HttpResponseListener
 
     public void queueRequest(Request request){
         requestsList.add(request);
-        sendNextRequest();
+        if (currentRequest == null) {
+            sendNextRequest();
+        }
     }
 
     public Request deQueueRequest(){
@@ -76,6 +78,7 @@ public class RequestsManager implements SendHttpRequestTask.HttpResponseListener
                 //TODO Session expired. Reordenar cola peticiones y mandar ini de nuevo
             }
             currentRequest.processResponse(jsonResponse);
+            currentRequest = null;
         }
         catch (JSONException ex){
             ex.printStackTrace();

@@ -21,10 +21,12 @@ public class User implements Serializable {
     }
 
     public User(JSONObject userJSON){
-        this.userId = JSONUtils.getStringFromJSONObject("gplus", userJSON);
-        this.userName = JSONUtils.getStringFromJSONObject("name", userJSON);
-        this.userEmail = JSONUtils.getStringFromJSONObject("email", userJSON);
-        this.userPictureUrl = JSONUtils.getStringFromJSONObject("picture", userJSON);
+        if (userJSON != null) {
+            this.userId = JSONUtils.getStringFromJSONObject("gplus", userJSON);
+            this.userName = JSONUtils.getStringFromJSONObject("name", userJSON);
+            this.userEmail = JSONUtils.getStringFromJSONObject("email", userJSON);
+            this.userPictureUrl = JSONUtils.getStringFromJSONObject("picture", userJSON);
+        }
     }
 
     @Override

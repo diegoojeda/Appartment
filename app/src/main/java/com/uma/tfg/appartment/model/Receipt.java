@@ -5,6 +5,7 @@ import com.uma.tfg.appartment.util.JSONUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,12 +27,14 @@ import java.util.List;
 * Single receipt
 *
 * */
-public class Receipt {
+public class Receipt implements Serializable{
 
     public String mId;
-    public String mCreatorId;
-    public double mAmount;
     public String mCdt; //TimeStamp para ordenar los recibos por fecha
+    public String mCreatorId;
+    public String mName;
+    public double mAmount;
+    public String mGroupId;//Id del grupo al que pertenece el recibo
     public List<User> mDebtors;
     public List<User> mPayed;
 
@@ -39,10 +42,12 @@ public class Receipt {
 
     public Receipt(JSONObject receiptJSON){
         this.mId = JSONUtils.getStringFromJSONObject("id", receiptJSON);
-        this.mAmount = JSONUtils.getDoubleFromJSONObject("amount", receiptJSON);
-        this.mCreatorId = JSONUtils.getStringFromJSONObject("creator", receiptJSON);
         this.mCdt = JSONUtils.getStringFromJSONObject("cdt", receiptJSON);
-        this.mEverybodyHasPayed = JSONUtils.getIntFromJSONObject("flag", receiptJSON) == 0;
+        this.mAmount = JSONUtils.getDoubleFromJSONObject("amount", receiptJSON);
+        this.mName = JSONUtils.getStringFromJSONObject("name", receiptJSON);
+        this.mCreatorId = JSONUtils.getStringFromJSONObject("creator", receiptJSON);
+        this.mEverybodyHasPayed = JSONUtils.getIntFromJSONObject("flag", receiptJSON) == 1;
+        this.mGroupId = JSONUtils.getStringFromJSONObject("idgroup", receiptJSON);
 
         JSONArray debtorsJSONArray = JSONUtils.getJSONArrayFromJSONObject("debtors", receiptJSON);
         JSONArray payedJSONArray = JSONUtils.getJSONArrayFromJSONObject("payed", receiptJSON);

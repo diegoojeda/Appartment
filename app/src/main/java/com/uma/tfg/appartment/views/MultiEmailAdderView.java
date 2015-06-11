@@ -88,11 +88,12 @@ public class MultiEmailAdderView extends LinearLayout implements View.OnClickLis
         mLayoutWhereEditTextsAreAdded.addView(mFormEditTextsList.get(mFormEditTextsList.size() - 1));
     }
 
-    //Devuelve null si hay emails inválidos, o una lista vacía si el usuario no ha escrito ningún email
     public ArrayList<String> getEmailList() {
         ArrayList<String> emailList = new ArrayList<>();
         for (FormEditText fet : mFormEditTextsList) {
-            emailList.add(fet.getText().toString());
+            if (!TextUtils.isEmpty(fet.getText().toString())) {
+                emailList.add(fet.getText().toString());
+            }
         }
         return emailList;
     }
@@ -106,7 +107,13 @@ public class MultiEmailAdderView extends LinearLayout implements View.OnClickLis
     public boolean validateAllEmails() {
         boolean areAllValid = true;
         for (FormEditText fet : mFormEditTextsList){
-            areAllValid = fet.testValidity() && areAllValid;
+            //Tomaremos la cadena vacía como un "FormEditText" válido, aunque luego no se devolverá en la lista de e-mails
+            if (fet.getText().length() == 0){
+                areAllValid &= true;
+            }
+            else {
+                areAllValid = fet.testValidity() && areAllValid;
+            }
         }
         return areAllValid;
     }

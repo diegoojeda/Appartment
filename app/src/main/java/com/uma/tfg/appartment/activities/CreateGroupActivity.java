@@ -45,6 +45,9 @@ public class CreateGroupActivity extends Activity implements GroupsPost.GroupsPo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_group);
+        if (getActionBar() != null) {
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         initViews();
 
         if (savedInstanceState != null){
@@ -89,8 +92,6 @@ public class CreateGroupActivity extends Activity implements GroupsPost.GroupsPo
                 Toast.makeText(this, "Hay algún E-mail inválido, revísalos", Toast.LENGTH_SHORT).show();
             }
         }
-
-
     }
 
     private void createGroupOnServer() {
@@ -114,9 +115,13 @@ public class CreateGroupActivity extends Activity implements GroupsPost.GroupsPo
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_finish_group_creation) {
-            onFinishActionPressed();
-            return true;
+        switch (id){
+            case R.id.action_finish_group_creation:
+                onFinishActionPressed();
+                return true;
+            case android.R.id.home:
+                onBackPressed();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

@@ -105,7 +105,7 @@ public class ReceiptsPost extends PostRequest{
         int rc = response.getInt("rc");
         if (rc == 0){
             failed = false;
-            Receipt singleReceipt = new Receipt(response.getJSONObject("receipt"));
+            Receipt singleReceipt = new Receipt(response.getJSONObject("inserted"));
             if (mListener != null){
                 mListener.onReceiptsPostSuccess(singleReceipt);
             }

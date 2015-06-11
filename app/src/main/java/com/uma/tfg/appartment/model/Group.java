@@ -3,7 +3,6 @@ package com.uma.tfg.appartment.model;
 import com.uma.tfg.appartment.util.JSONUtils;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
@@ -18,7 +17,7 @@ public class Group implements Serializable {
 
     public String mCreatorId;
 
-    public List<String> mMembers;
+    public List<User> mMembers;
 
     public Group (JSONObject jsonGroup){
         mId = JSONUtils.getStringFromJSONObject("id", jsonGroup);
@@ -30,16 +29,15 @@ public class Group implements Serializable {
         if (membersJSONArray != null) {
             mMembers = new ArrayList<>();
             for (int i = 0; i < membersJSONArray.length(); i++) {
-                mMembers.add(JSONUtils.getStringFromJSONArray(membersJSONArray, i));
+                mMembers.add(new User(JSONUtils.getJSONObjectFromJSONArray(membersJSONArray, i)));
             }
         }
     }
 
-    public Group(String id, String groupName, String creatorId, List<String> groupMembers) {
+    public Group(String id, String groupName, String creatorId, List<User> groupMembers) {
         mId = id;
         mGroupName = groupName;
         mCreatorId = creatorId;
         mMembers = groupMembers;
     }
-
 }

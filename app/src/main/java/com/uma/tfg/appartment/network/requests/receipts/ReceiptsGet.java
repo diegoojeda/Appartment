@@ -1,6 +1,6 @@
 package com.uma.tfg.appartment.network.requests.receipts;
 
-// GET GROUP RECEIPT -> 'http://appartment-pruebamarja.rhcloud.com/receipt/?session_id=234434234324&id_group=id'
+// GET GROUP RECEIPT -> 'http://appartment-pruebamarja.rhcloud.com/receipt/?session_id=234434234324&idgroup=id'
 
 import android.text.TextUtils;
 
@@ -45,7 +45,7 @@ public class ReceiptsGet extends GetRequest{
         if (!TextUtils.isEmpty(mGroupId)){
             JSONObject urlQueryParameters = new JSONObject();
             try {
-                urlQueryParameters.put("id_group", mGroupId);
+                urlQueryParameters.put("idgroup", mGroupId);
             }
             catch (JSONException ex){
                 ex.printStackTrace();

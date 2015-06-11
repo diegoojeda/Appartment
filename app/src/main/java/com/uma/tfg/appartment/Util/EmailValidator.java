@@ -14,6 +14,6 @@ public class EmailValidator extends Validator{
         if (editText.getText().length() == 0){
             return true;
         }
-        return editText != null && Util.isValidEmail(editText.getText().toString());
+        return Util.isValidEmail(editText.getText().toString());
     }
 }

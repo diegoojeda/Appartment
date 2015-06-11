@@ -12,7 +12,7 @@
         android:orientation="vertical">
 
         <com.uma.tfg.appartment.views.TypefacedTextView
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="40dp"
             android:layout_marginBottom="10dp"
             android:padding="20dp"
             android:gravity="center"
@@ -20,8 +20,7 @@
             android:layout_height="wrap_content"
             android:singleLine="false"
             android:textSize="35sp"
-            android:text="Vaya, parece que aún no has creado ningún grupo.
-            \n¡Empieza creando uno e invitando a tus amigos!"/>
+            android:text="Vaya, parece que aun no has creado ningun grupo.\n\n¡Empieza creando uno e invitando a tus amigos!"/>
 
         <!--<Button-->
             <!--android:id="@+id/create_first_group_button"-->
@@ -33,24 +32,26 @@
     </LinearLayout>
 
     <LinearLayout
+        android:layout_gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/index_layout"
         android:orientation="vertical">
 
-        <com.uma.tfg.appartment.views.TypefacedTextView
-            android:gravity="center"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:text="Mis grupos"/>
+        <!--<com.uma.tfg.appartment.views.TypefacedTextView-->
+            <!--android:gravity="center"-->
+            <!--android:textSize="30sp"-->
+            <!--android:textStyle="bold"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="10dp"-->
+            <!--android:text="Mis grupos"/>-->
 
         <ProgressBar
-            android:layout_gravity="center_horizontal"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:indeterminate="true"
             android:id="@+id/loading_groups_spinner"/>
 
@@ -58,7 +59,6 @@
             android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1.0"
             android:id="@+id/my_groups_listview"/>
 
         <!--<Button-->
@@ -73,7 +73,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="right">
+        android:gravity="end">
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/create_new_group_button"
             fab:fab_icon="@mipmap/ic_add_white_48dp"

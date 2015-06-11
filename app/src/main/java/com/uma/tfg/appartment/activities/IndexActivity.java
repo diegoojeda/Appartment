@@ -103,6 +103,9 @@ public class IndexActivity extends Activity implements View.OnClickListener, Gro
     }
 
     private void addNewGroupToList(Group g){
+        if (mGroupsListAdapter.mGroupsList.isEmpty()){
+            showNonEmptyGroupsListLayout();
+        }
         mGroupsListAdapter.mGroupsList.add(g);
         mGroupsListAdapter.notifyDataSetChanged();
     }
@@ -120,6 +123,9 @@ public class IndexActivity extends Activity implements View.OnClickListener, Gro
                 public void onDismiss(ListViewAdapter view, int position) {
                     RequestsBuilder.sendDeleteGroupRequest(mGroupsListAdapter.mGroupsList.get(position).mId, IndexActivity.this);
                     mGroupsListAdapter.remove(position);
+                    if (mGroupsListAdapter.mGroupsList.isEmpty()){
+                        showEmptyGroupsListLayout();
+                    }
                 }
             });
         mMyGroupsListView.setOnTouchListener(touchListener);

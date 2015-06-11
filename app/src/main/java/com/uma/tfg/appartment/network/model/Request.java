@@ -72,7 +72,7 @@ import java.util.List;
  // (Por ahora no)GET GROUP FRIENDS -> 'http://appartment-pruebamarja.rhcloud.com/user/?session_id=234434234324' Y type => members Y idgroup
  // INSERT receipt -> 'http://appartment-pruebamarja.rhcloud.com/receipt/?session_id=234434234324' Y action => insert Y idgroup Y amount Y debtors => array() Y namereceipt
  // GET  RECEIPT -> 'http://appartment-pruebamarja.rhcloud.com/receipt/id_recibo/?session_id=234434234324'
- // GET GROUP RECEIPT -> 'http://appartment-pruebamarja.rhcloud.com/receipt/?session_id=234434234324&id_group=id'
+ // GET GROUP RECEIPT -> 'http://appartment-pruebamarja.rhcloud.com/receipt/?session_id=234434234324&idgroup=id'
  // UPDATE CREDITORS RECEIPT -> 'http://appartment-pruebamarja.rhcloud.com/receipt/id_recibo/?session_id=234434234324' Y action => update Y type => debtors
  // UPDATE  RECEIPT -> 'http://appartment-pruebamarja.rhcloud.com/receipt/id_recibo/?session_id=234434234324' Y action => update Y type => receipt Y name => nuevo_nombre
  // DELETE  RECEIPT -> 'http://appartment-pruebamarja.rhcloud.com/receipt/id_recibo/?session_id=234434234324' Y action => delete
