@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 // INSERT receipt -> 'http://appartment-pruebamarja.rhcloud.com/receipt/?session_id=234434234324' Y action => insert Y idgroup Y amount Y debtors => array() Y namereceipt
@@ -58,7 +59,7 @@ public class ReceiptsPost extends PostRequest{
     @Override
     public List<NameValuePair> getPostParameters() {
         List<NameValuePair> postParameters = new ArrayList<>();
-        switch (mAction){
+        switch (mAction) {
             case INSERT:
                 postParameters.add(new BasicNameValuePair("idgroup", mGroupId));
                 postParameters.add(new BasicNameValuePair("amount", String.valueOf(mAmount)));

@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -15,6 +16,7 @@ import android.widget.ProgressBar;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.uma.tfg.appartment.R;
 import com.uma.tfg.appartment.activities.CreateReceiptActivity;
+import com.uma.tfg.appartment.activities.ReceiptDetailsActivity;
 import com.uma.tfg.appartment.adapters.ReceiptsListAdapter;
 import com.uma.tfg.appartment.model.Group;
 import com.uma.tfg.appartment.model.Receipt;
@@ -34,10 +36,10 @@ public class ReceiptsListFragment extends Fragment implements ReceiptsGet.Receip
 
     private Group mGroup;
 
-    private ReceiptsListAdapter mPayedReceiptsAdapter;
+    private ReceiptsListAdapter mPaidReceiptsAdapter;
     private ReceiptsListAdapter mPendingReceiptsAdapter;
 
-    private ListView mPayedReceiptsListView;
+    private ListView mPaidReceiptsListView;
     private ListView mPendingReceiptsListView;
 
     private ProgressBar mLoadingSpinner;
@@ -76,25 +78,45 @@ public class ReceiptsListFragment extends Fragment implements ReceiptsGet.Receip
             finishWithError();
         }
         else{
-            mPayedReceiptsAdapter = new ReceiptsListAdapter(new ArrayList<Receipt>());
+            mPaidReceiptsAdapter = new ReceiptsListAdapter(new ArrayList<Receipt>());
             mPendingReceiptsAdapter = new ReceiptsListAdapter(new ArrayList<Receipt>());
         }
     }
 
     private void initializeAdapters(List<Receipt> receiptList){
-        mPayedReceiptsListView.setAdapter(mPayedReceiptsAdapter);
+        mPaidReceiptsListView.setAdapter(mPaidReceiptsAdapter);
         mPendingReceiptsListView.setAdapter(mPendingReceiptsAdapter);
 
+        mPaidReceiptsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                goToReceiptDetails(mPaidReceiptsAdapter.mReceiptsList.get(i));
+            }
+        });
+
+        mPendingReceiptsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                goToReceiptDetails(mPendingReceiptsAdapter.mReceiptsList.get(i));
+            }
+        });
+
         for (Receipt r : receiptList){
-            if (r.mEverybodyHasPayed){
-                mPayedReceiptsAdapter.add(r);
+            if (r.mEverybodyHasPaid){
+                mPaidReceiptsAdapter.add(r);
             }
             else{
                 mPendingReceiptsAdapter.add(r);
             }
         }
-        mPayedReceiptsAdapter.notifyDataSetChanged();
+        mPaidReceiptsAdapter.notifyDataSetChanged();
         mPendingReceiptsAdapter.notifyDataSetChanged();
+    }
+
+    private void goToReceiptDetails(Receipt receipt){
+        Intent i = new Intent(getActivity(), ReceiptDetailsActivity.class);
+        i.putExtra(ReceiptDetailsActivity.EXTRA_KEY_RECEIPT, receipt);
+        getActivity().startActivity(i);
     }
 
     private void loadReceiptsForGroupId() {
@@ -105,7 +127,7 @@ public class ReceiptsListFragment extends Fragment implements ReceiptsGet.Receip
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View contentView = inflater.inflate(R.layout.fragment_receipts_list, container, false);
-        mPayedReceiptsListView = (ListView) contentView.findViewById(R.id.payed_receipts_lv);
+        mPaidReceiptsListView = (ListView) contentView.findViewById(R.id.paid_receipts_lv);
         mPendingReceiptsListView = (ListView) contentView.findViewById(R.id.pending_receipts_lv);
 
         mLoadingSpinner = (ProgressBar) contentView.findViewById(R.id.loading_receipts_progress_bar);

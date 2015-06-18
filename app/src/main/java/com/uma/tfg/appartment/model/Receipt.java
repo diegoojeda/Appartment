@@ -35,10 +35,11 @@ public class Receipt implements Serializable{
     public String mName;
     public double mAmount;
     public String mGroupId;//Id del grupo al que pertenece el recibo
+    public int mDebtorsQuantity;
     public List<User> mDebtors;
-    public List<User> mPayed;
+    public List<User> mPaid;
 
-    public boolean mEverybodyHasPayed;
+    public boolean mEverybodyHasPaid;
 
     public Receipt(JSONObject receiptJSON){
         this.mId = JSONUtils.getStringFromJSONObject("id", receiptJSON);
@@ -46,11 +47,12 @@ public class Receipt implements Serializable{
         this.mAmount = JSONUtils.getDoubleFromJSONObject("amount", receiptJSON);
         this.mName = JSONUtils.getStringFromJSONObject("name", receiptJSON);
         this.mCreatorId = JSONUtils.getStringFromJSONObject("creator", receiptJSON);
-        this.mEverybodyHasPayed = JSONUtils.getIntFromJSONObject("flag", receiptJSON) == 1;
+        this.mEverybodyHasPaid = JSONUtils.getIntFromJSONObject("flag", receiptJSON) == 1;
         this.mGroupId = JSONUtils.getStringFromJSONObject("idgroup", receiptJSON);
+        this.mDebtorsQuantity = JSONUtils.getIntFromJSONObject("numdebtors", receiptJSON);
 
         JSONArray debtorsJSONArray = JSONUtils.getJSONArrayFromJSONObject("debtors", receiptJSON);
-        JSONArray payedJSONArray = JSONUtils.getJSONArrayFromJSONObject("payed", receiptJSON);
+        JSONArray paidJSONArray = JSONUtils.getJSONArrayFromJSONObject("paid", receiptJSON);
 
         if (debtorsJSONArray != null){
             mDebtors = new ArrayList<>();
@@ -59,10 +61,10 @@ public class Receipt implements Serializable{
             }
         }
 
-        if (payedJSONArray != null) {
-            mPayed = new ArrayList<>();
-            for (int i = 0; i < payedJSONArray.length(); i++){
-                mPayed.add(new User(JSONUtils.getJSONObjectFromJSONArray(payedJSONArray, i)));
+        if (paidJSONArray != null) {
+            mPaid = new ArrayList<>();
+            for (int i = 0; i < paidJSONArray.length(); i++){
+                mPaid.add(new User(JSONUtils.getJSONObjectFromJSONArray(paidJSONArray, i)));
             }
         }
     }

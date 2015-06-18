@@ -52,7 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:id="@+id/payed_receipts_linear_layout">
+            android:id="@+id/paid_receipts_linear_layout">
 
             <TextView
                 android:layout_width="match_parent"
@@ -61,7 +61,7 @@
             <ListView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/payed_receipts_lv"/>
+                android:id="@+id/paid_receipts_lv"/>
         </LinearLayout>
     </LinearLayout>
     <RelativeLayout

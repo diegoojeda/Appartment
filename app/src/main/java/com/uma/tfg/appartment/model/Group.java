@@ -14,6 +14,7 @@ public class Group implements Serializable {
     public String mId;
     public String mGroupName;
     public String mCdt;
+    public int mCount;
 
     public String mCreatorId;
 
@@ -24,6 +25,7 @@ public class Group implements Serializable {
         mGroupName = JSONUtils.getStringFromJSONObject("name", jsonGroup);
         mCdt = JSONUtils.getStringFromJSONObject("cdt", jsonGroup);
         mCreatorId = JSONUtils.getStringFromJSONObject("creator", jsonGroup);
+        mCount = JSONUtils.getIntFromJSONObject("nmembers", jsonGroup);
 
         JSONArray membersJSONArray = JSONUtils.getJSONArrayFromJSONObject("members", jsonGroup);
         if (membersJSONArray != null) {

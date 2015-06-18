@@ -47,7 +47,12 @@ public class ReceiptsListAdapter extends BaseAdapter{
         Receipt item = mReceiptsList.get(position);
 
         TextView receiptNameTextView = (TextView) v.findViewById(R.id.receipt_name_tv);
+        TextView receiptAmountTextView = (TextView) v.findViewById(R.id.receipt_amount_tv);
+        TextView receiptMembersNotPaidTextView = (TextView) v.findViewById(R.id.members_not_paid_yet_tv);
+
         receiptNameTextView.setText(item.mName);
+        receiptAmountTextView.setText(String.valueOf(item.mAmount));
+        receiptMembersNotPaidTextView.setText(String.valueOf(item.mDebtorsQuantity));
 
         return v;
     }
