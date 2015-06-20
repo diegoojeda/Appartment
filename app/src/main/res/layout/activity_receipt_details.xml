@@ -7,6 +7,7 @@
         android:layout_height="wrap_content">
 
         <TextView
+            android:textSize="32sp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:lines="1"
@@ -17,6 +18,7 @@
             android:id="@+id/receipt_details_name_tv"/>
 
         <TextView
+            android:textSize="32sp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
@@ -32,16 +34,26 @@
         android:orientation="horizontal">
 
         <TextView
+            android:textSize="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Creador: "/>
         <TextView
+            android:textSize="18sp"
+            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/receipt_creator_tv"/>
     </LinearLayout>
 
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="Usuarios:"/>
     <ListView
+        android:clickable="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
@@ -53,5 +65,34 @@
         android:layout_gravity="center_horizontal"
         android:indeterminate="true"
         android:id="@+id/loading_users_spinner"/>
+
+    <LinearLayout
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+        <Button
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Borrar este recibo"
+            android:id="@+id/delete_receipt_button"/>
+
+        <View
+            android:layout_width="15dp"
+            android:layout_height="match_parent"
+            android:id="@+id/view_separator_buttons"/>
+
+        <Button
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ya he pagado"
+            android:id="@+id/user_has_paid_button"/>
+
+    </LinearLayout>
+
 
 </LinearLayout>

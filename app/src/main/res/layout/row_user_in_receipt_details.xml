@@ -8,7 +8,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:src="@drawable/default_profile"
-        android:id="@+id/receipt_user_profile_picture_iv"/>
+        android:id="@+id/receipt_details_user_profile_picture_iv"/>
     <LinearLayout
         android:layout_weight="1"
         android:layout_width="0dp"
@@ -32,8 +32,9 @@
             android:id="@+id/receipt_user_email_tv"/>
     </LinearLayout>
 
-    <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/switch_receipt_paid"/>
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center_vertical"
+        android:id="@+id/receipt_state_iv"/>
 </LinearLayout>

@@ -54,6 +54,18 @@ public class JSONUtils {
         return null;
     }
 
+    public static JSONObject getJSONObjectFromJSONObject(String key, JSONObject jsonObject){
+        if (jsonObject.has(key)){
+            try{
+                return jsonObject.getJSONObject(key);
+            }
+            catch (JSONException ex){
+                ex.printStackTrace();
+            }
+        }
+        return null;
+    }
+
     public static JSONObject getJSONObjectFromJSONArray(JSONArray jsonArray, int position){
         try{
             return jsonArray.getJSONObject(position);

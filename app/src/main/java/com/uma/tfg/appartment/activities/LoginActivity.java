@@ -96,7 +96,8 @@ public class LoginActivity extends Activity implements View.OnClickListener,
         String userId = AppartmentSharedPreferences.getUserId();
         String userName = AppartmentSharedPreferences.getUserName();
         String userEmail = AppartmentSharedPreferences.getUserEmail();
-        RequestsBuilder.sendLoginPostRequest(userId, userEmail, userName, this);
+        String userPicture = AppartmentSharedPreferences.getUserProfilePicture();
+        RequestsBuilder.sendLoginPostRequest(userId, userEmail, userName, userPicture, this);
     }
 
     private void doLoginWithGPlus() {
@@ -131,6 +132,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,
     private void saveUserInformationToSharedPreferences(User user){
         AppartmentSharedPreferences.setUserId(user.userId);
         AppartmentSharedPreferences.setUserEmail(user.userEmail);
+        AppartmentSharedPreferences.setUserProfilePicture(user.userPictureUrl);
         AppartmentSharedPreferences.setUserName(user.userName);
     }
 

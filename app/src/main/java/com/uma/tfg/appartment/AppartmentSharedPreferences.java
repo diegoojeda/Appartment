@@ -61,6 +61,18 @@ public class AppartmentSharedPreferences {
         return prefs.getString("userEmail", null);
     }
 
+    public static void setUserProfilePicture(String userPicture) {
+        SharedPreferences prefs = mContext.getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("userPicture", userPicture);
+        editor.apply();
+    }
+
+    public static String getUserProfilePicture() {
+        SharedPreferences prefs = mContext.getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+        return prefs.getString("userPicture", null);
+    }
+
     public static boolean isUserLoggedIn() {
         return getUserEmail() != null && getUserId() != null && getUserName() != null;
     }

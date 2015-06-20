@@ -20,8 +20,8 @@ public class RequestsBuilder {
         RequestsManager.getInstance().queueRequest(request);
     }
 
-    public static void sendLoginPostRequest(String userId, String userEmail, String userName, LoginPost.LoginPostListener listener) {
-        LoginPost request = new LoginPost(userId, userEmail, userName, listener);
+    public static void sendLoginPostRequest(String userId, String userEmail, String userName, String userPicture, LoginPost.LoginPostListener listener) {
+        LoginPost request = new LoginPost(userId, userEmail, userName, userPicture, listener);
         RequestsManager.getInstance().queueRequest(request);
     }
 
@@ -72,6 +72,13 @@ public class RequestsBuilder {
 
     public static void sendDeleteReceiptRequest(String receiptId, ReceiptsPost.ReceiptsPostListener listener){
         ReceiptsPost request = new ReceiptsPost(ReceiptsPost.ReceiptsPostActions.DELETE, listener);
+        request.mReceiptId = receiptId;
+
+        RequestsManager.getInstance().queueRequest(request);
+    }
+
+    public static void sendUserHasPaidReceiptRequest(String receiptId, ReceiptsPost.ReceiptsPostListener listener){
+        ReceiptsPost request = new ReceiptsPost(ReceiptsPost.ReceiptPostUpdateTypes.DEBTORS, listener);
         request.mReceiptId = receiptId;
 
         RequestsManager.getInstance().queueRequest(request);

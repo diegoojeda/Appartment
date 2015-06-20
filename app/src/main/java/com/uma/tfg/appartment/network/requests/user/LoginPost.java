@@ -31,13 +31,15 @@ public class LoginPost extends PostRequest {
     private String mUserId;
     private String mUserEmail;
     private String mUserName;
+    private String mUserPicture;
 
     private LoginPostListener mListener;
 
-    public LoginPost(String userId, String userEmail, String userName, LoginPostListener listener) {
+    public LoginPost(String userId, String userEmail, String userName, String userPicture, LoginPostListener listener) {
         this.mUserId = userId;
         this.mUserEmail = userEmail;
         this.mUserName = userName;
+        this.mUserPicture = userPicture;
         this.mListener = listener;
     }
 
@@ -45,8 +47,8 @@ public class LoginPost extends PostRequest {
     public List<NameValuePair> getPostParameters() {
         List<NameValuePair> arguments = new ArrayList<>();
         arguments.add(new BasicNameValuePair("id", mUserId));
-        arguments.add(new BasicNameValuePair("lang", Locale.getDefault().toString()));
-        //TODO
+        arguments.add(new BasicNameValuePair("lang", Locale.getDefault().toString())); //TODO
+        arguments.add(new BasicNameValuePair("picture", mUserPicture));
         arguments.add(new BasicNameValuePair("name", mUserName));
         arguments.add(new BasicNameValuePair("email", mUserEmail));
 

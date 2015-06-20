@@ -58,6 +58,9 @@ public class UsersListAdapter extends BaseAdapter{
         if (!TextUtils.isEmpty(item.userPictureUrl)){
             Picasso.with(parent.getContext()).load(item.userPictureUrl).into((ImageView) v.findViewById(R.id.user_profile_picture_iv));
         }
+        else{
+            Picasso.with(parent.getContext()).load(R.drawable.default_profile).into((ImageView) v.findViewById(R.id.user_profile_picture_iv));
+        }
 
         return v;
     }

@@ -23,16 +23,17 @@ import com.uma.tfg.appartment.model.Receipt;
 import com.uma.tfg.appartment.network.management.RequestsBuilder;
 import com.uma.tfg.appartment.network.requests.receipts.ReceiptsGet;
 import com.uma.tfg.appartment.util.Logger;
+import com.uma.tfg.appartment.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReceiptsListFragment extends Fragment implements ReceiptsGet.ReceiptsGetListener, View.OnClickListener{
+public class ReceiptsListFragment extends Fragment implements ReceiptsGet.ReceiptsGetListener{
 
     public static final String EXTRA_GROUP = "ReceiptsListFragment.Group";
     private static final String SAVE_GROUP = "ReceiptsListFragment.SaveGroup";
 
-    public static final int CREATE_RECEIPT_REQUEST_CODE = 2001;
+    public static final int RECEIPT_DETAILS_REQUEST_CODE = 2002;
 
     private Group mGroup;
 
@@ -44,7 +45,7 @@ public class ReceiptsListFragment extends Fragment implements ReceiptsGet.Receip
 
     private ProgressBar mLoadingSpinner;
     private LinearLayout mListsLayoutWrapper;
-    private FloatingActionButton mCreateNewReceiptButton;
+//    private FloatingActionButton mCreateNewReceiptButton;
 
     public static ReceiptsListFragment newInstance(Group group) {
         ReceiptsListFragment fragment = new ReceiptsListFragment();
@@ -83,6 +84,12 @@ public class ReceiptsListFragment extends Fragment implements ReceiptsGet.Receip
         }
     }
 
+    public void addNewReceipt(Receipt receipt){
+        hideEmptyReceiptsListInformation();
+        mPendingReceiptsAdapter.add(0, receipt);
+        Util.setListViewHeightBasedOnChildren(mPendingReceiptsListView);
+    }
+
     private void initializeAdapters(List<Receipt> receiptList){
         mPaidReceiptsListView.setAdapter(mPaidReceiptsAdapter);
         mPendingReceiptsListView.setAdapter(mPendingReceiptsAdapter);
@@ -109,6 +116,8 @@ public class ReceiptsListFragment extends Fragment implements ReceiptsGet.Receip
                 mPendingReceiptsAdapter.add(r);
             }
         }
+        Util.setListViewHeightBasedOnChildren(mPaidReceiptsListView);
+        Util.setListViewHeightBasedOnChildren(mPendingReceiptsListView);
         mPaidReceiptsAdapter.notifyDataSetChanged();
         mPendingReceiptsAdapter.notifyDataSetChanged();
     }
@@ -116,7 +125,7 @@ public class ReceiptsListFragment extends Fragment implements ReceiptsGet.Receip
     private void goToReceiptDetails(Receipt receipt){
         Intent i = new Intent(getActivity(), ReceiptDetailsActivity.class);
         i.putExtra(ReceiptDetailsActivity.EXTRA_KEY_RECEIPT, receipt);
-        getActivity().startActivity(i);
+        startActivityForResult(i, RECEIPT_DETAILS_REQUEST_CODE);
     }
 
     private void loadReceiptsForGroupId() {
@@ -133,8 +142,8 @@ public class ReceiptsListFragment extends Fragment implements ReceiptsGet.Receip
         mLoadingSpinner = (ProgressBar) contentView.findViewById(R.id.loading_receipts_progress_bar);
         mListsLayoutWrapper = (LinearLayout) contentView.findViewById(R.id.receipts_lists_layout_wrapper);
 
-        mCreateNewReceiptButton = (FloatingActionButton) contentView.findViewById(R.id.create_new_receipt_button);
-        mCreateNewReceiptButton.setOnClickListener(this);
+//        mCreateNewReceiptButton = (FloatingActionButton) contentView.findViewById(R.id.create_new_receipt_button);
+//        mCreateNewReceiptButton.setOnClickListener(this);
 
         loadReceiptsForGroupId();
         return contentView;
@@ -176,37 +185,34 @@ public class ReceiptsListFragment extends Fragment implements ReceiptsGet.Receip
         //TODO
     }
 
-    public void onCreateNewReceiptButtonPressed() {
-        Intent i = new Intent(getActivity(), CreateReceiptActivity.class);
-        i.putExtra(CreateReceiptActivity.EXTRA_GROUP, mGroup);
-        startActivityForResult(i, CREATE_RECEIPT_REQUEST_CODE);
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CREATE_RECEIPT_REQUEST_CODE){
-            if (resultCode == Activity.RESULT_OK) {
-                hideEmptyReceiptsListInformation();
+        if (requestCode == RECEIPT_DETAILS_REQUEST_CODE){
+            if (resultCode == Activity.RESULT_OK){
+                Bundle extras = data.getExtras();
+                if (extras != null){
+                    if (extras.containsKey(ReceiptDetailsActivity.EXTRA_RETURN_RECEIPT_KEY)){
+                        Receipt receipt = (Receipt) extras.getSerializable(ReceiptDetailsActivity.EXTRA_RETURN_RECEIPT_KEY);
+                        if (receipt.mEverybodyHasPaid){
+                            mPaidReceiptsAdapter.modify(receipt);
+                        }
+                        else{
+                            mPendingReceiptsAdapter.modify(receipt);
+                        }
+                    }
+                }
+            }
+            else if (resultCode == ReceiptDetailsActivity.RESULT_DELETED){
                 Bundle extras = data.getExtras();
                 if (extras != null) {
-                    if (extras.containsKey(CreateReceiptActivity.EXTRA_RESULT_RECEIPT)) {
-                        Receipt receipt = (Receipt) extras.getSerializable(CreateReceiptActivity.EXTRA_RESULT_RECEIPT);
-                        mPendingReceiptsAdapter.add(receipt);
-                    }
+                    Receipt receiptToDelete = (Receipt) extras.getSerializable(ReceiptDetailsActivity.EXTRA_RETURN_RECEIPT_KEY);
+                    mPendingReceiptsAdapter.delete(receiptToDelete);
+                    mPaidReceiptsAdapter.delete(receiptToDelete);
                 }
             }
         }
         else{
             super.onActivityResult(requestCode, resultCode, data);
-        }
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.create_new_receipt_button:
-                onCreateNewReceiptButtonPressed();
-                break;
         }
     }
 

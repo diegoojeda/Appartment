@@ -65,8 +65,7 @@ public class UsersListFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View contentView = inflater.inflate(R.layout.fragment_users_list, container, false);
 
         mUsersListView = (ListView) contentView.findViewById(R.id.users_listview);

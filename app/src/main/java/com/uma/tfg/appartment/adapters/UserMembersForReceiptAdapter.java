@@ -63,6 +63,9 @@ public class UserMembersForReceiptAdapter extends BaseAdapter{
             if (!TextUtils.isEmpty(item.userPictureUrl)){
                 Picasso.with(parent.getContext()).load(item.userPictureUrl).into((ImageView) v.findViewById(R.id.receipt_members_user_profile_iv));
             }
+            else{
+                Picasso.with(parent.getContext()).load(R.drawable.default_profile).into((ImageView) v.findViewById(R.id.receipt_members_user_profile_iv));
+            }
             ((Switch) v.findViewById(R.id.receipt_members_add_user_switch)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {

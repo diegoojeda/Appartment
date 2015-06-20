@@ -1,6 +1,5 @@
 package com.uma.tfg.appartment.adapters;
 
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,4 +61,30 @@ public class ReceiptsListAdapter extends BaseAdapter{
         this.notifyDataSetChanged();
     }
 
+    public void add(int position, Receipt receipt){
+        mReceiptsList.add(position, receipt);
+        this.notifyDataSetChanged();
+    }
+
+    public void modify(Receipt receipt){
+        for (int i = 0; i<mReceiptsList.size(); i++){
+            if (mReceiptsList.get(i).mId.equals(receipt.mId)){
+                mReceiptsList.set(i, receipt);
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    public void delete(Receipt receipt){
+        int pos = -1;
+        for (int i = 0; i<mReceiptsList.size(); i++){
+            if (mReceiptsList.get(i).mId.equals(receipt.mId)){
+                pos = i;
+            }
+        }
+        if (pos != -1){
+            mReceiptsList.remove(pos);
+            notifyDataSetChanged();
+        }
+    }
 }

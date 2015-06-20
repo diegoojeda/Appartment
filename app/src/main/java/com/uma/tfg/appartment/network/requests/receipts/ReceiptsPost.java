@@ -15,12 +15,29 @@ import java.util.List;
 
 // INSERT receipt -> 'http://appartment-pruebamarja.rhcloud.com/receipt/?session_id=234434234324' Y action => insert Y idgroup Y amount Y debtors => array() Y namereceipt
 // DELETE  RECEIPT -> 'http://appartment-pruebamarja.rhcloud.com/receipt/id_recibo/?session_id=234434234324' Y action => delete
+// UPDATE CREDITORS RECEIPT -> 'http://appartment-pruebamarja.rhcloud.com/receipt/id_recibo/?session_id=234434234324' Y action => update Y type => debtors
+// UPDATE  RECEIPT -> 'http://appartment-pruebamarja.rhcloud.com/receipt/id_recibo/?session_id=234434234324' Y action => update Y type => receipt Y name => nuevo_nombre
 
 public class ReceiptsPost extends PostRequest{
 
     public interface ReceiptsPostListener{
         void onReceiptsPostSuccess(Receipt singleReceipt);
         void onReceiptsPostError();
+    }
+
+    public enum ReceiptPostUpdateTypes{
+        DEBTORS("debtors"),
+        RECEIPT("receipt");
+
+        private String type;
+
+        ReceiptPostUpdateTypes(String type){
+            this.type = type;
+        }
+
+        public String toString() {
+            return type;
+        }
     }
 
     public enum ReceiptsPostActions {
@@ -40,6 +57,7 @@ public class ReceiptsPost extends PostRequest{
     }
 
     private ReceiptsPostActions mAction;
+    private ReceiptPostUpdateTypes mType;
 
     public String mGroupId;//Usado para insert
     public String mReceiptName;
@@ -53,6 +71,12 @@ public class ReceiptsPost extends PostRequest{
 
     public ReceiptsPost(ReceiptsPostActions action, ReceiptsPostListener listener){
         this.mAction = action;
+        this.mListener = listener;
+    }
+
+    public ReceiptsPost(ReceiptPostUpdateTypes type, ReceiptsPostListener listener){
+        this.mAction = ReceiptsPostActions.UPDATE;
+        this.mType = type;
         this.mListener = listener;
     }
 
@@ -70,7 +94,7 @@ public class ReceiptsPost extends PostRequest{
 
                 break;
             case UPDATE:
-
+                postParameters.add(new BasicNameValuePair("type", mType.toString()));
                 break;
         }
         return postParameters;
@@ -92,6 +116,9 @@ public class ReceiptsPost extends PostRequest{
         if (mAction == ReceiptsPostActions.DELETE){
             urlPathList.add(mReceiptId);
         }
+        else if (mAction == ReceiptsPostActions.UPDATE){
+            urlPathList.add(mReceiptId);
+        }
         return urlPathList;
     }
 
@@ -106,7 +133,10 @@ public class ReceiptsPost extends PostRequest{
         int rc = response.getInt("rc");
         if (rc == 0){
             failed = false;
-            Receipt singleReceipt = new Receipt(response.getJSONObject("inserted"));
+            Receipt singleReceipt = null;
+            if (response.has("inserted")) {
+                singleReceipt = new Receipt(response.getJSONObject("inserted"));
+            }
             if (mListener != null){
                 mListener.onReceiptsPostSuccess(singleReceipt);
             }

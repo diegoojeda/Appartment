@@ -13,6 +13,8 @@ public class User implements Serializable {
     public String userName;
     public String userPictureUrl;
 
+    public boolean userHasPaid;//Campo utilizado en los detalles de un recibo
+
     public User(String userId, String userEmail, String userName, String userPictureUrl) {
         this.userId = userId;
         this.userEmail = userEmail;
@@ -26,6 +28,9 @@ public class User implements Serializable {
             this.userName = JSONUtils.getStringFromJSONObject("name", userJSON);
             this.userEmail = JSONUtils.getStringFromJSONObject("email", userJSON);
             this.userPictureUrl = JSONUtils.getStringFromJSONObject("picture", userJSON);
+            if (userJSON.has("paid")){
+                this.userHasPaid = JSONUtils.getIntFromJSONObject("paid", userJSON) == 1;
+            }
         }
     }
 
