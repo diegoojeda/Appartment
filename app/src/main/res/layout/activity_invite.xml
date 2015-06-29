@@ -1,0 +1,18 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.uma.tfg.appartment.views.TypefacedTextView
+        android:gravity="center_horizontal"
+        android:textSize="26sp"
+        android:text="¡Escribe a continuación los E-mails de los amigos a los que quieras invitar!"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+    <com.uma.tfg.appartment.views.MultiEmailAdderView
+        android:id="@+id/invite_multi_email_adder_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

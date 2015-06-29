@@ -42,6 +42,14 @@ public class RequestsBuilder {
         RequestsManager.getInstance().queueRequest(request);
     }
 
+    public static void sendInviteToGroupRequest(String groupId, List<String> emailsList, GroupsPost.GroupsPostListener listener){
+        GroupsPost request = new GroupsPost(GroupsPost.GroupsPostAction.INVITE);
+        request.mId = groupId;
+        request.mEmails = emailsList;
+        request.mListener = listener;
+        RequestsManager.getInstance().queueRequest(request);
+    }
+
     public static void sendDeleteGroupRequest(String groupId, GroupsPost.GroupsPostListener listener) {
         GroupsPost request = new GroupsPost(GroupsPost.GroupsPostAction.DELETE);
         request.mId = groupId;

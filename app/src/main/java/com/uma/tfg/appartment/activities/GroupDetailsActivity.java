@@ -177,7 +177,9 @@ public class GroupDetailsActivity extends FragmentActivity implements GroupDetai
     }
 
     private void onAddNewUserButtonPressed() {
-
+        Intent i = new Intent(GroupDetailsActivity.this, InviteActivity.class);
+        i.putExtra(InviteActivity.EXTRA_GROUP_ID, mGroup.mId);
+        startActivity(i);
     }
 
     @Override

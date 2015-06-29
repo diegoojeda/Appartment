@@ -13,9 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.uma.tfg.appartment.R;
-import com.uma.tfg.appartment.activities.CreateReceiptActivity;
 import com.uma.tfg.appartment.activities.ReceiptDetailsActivity;
 import com.uma.tfg.appartment.adapters.ReceiptsListAdapter;
 import com.uma.tfg.appartment.model.Group;
@@ -86,8 +84,14 @@ public class ReceiptsListFragment extends Fragment implements ReceiptsGet.Receip
 
     public void addNewReceipt(Receipt receipt){
         hideEmptyReceiptsListInformation();
-        mPendingReceiptsAdapter.add(0, receipt);
-        Util.setListViewHeightBasedOnChildren(mPendingReceiptsListView);
+        if (receipt.mEverybodyHasPaid){
+            mPaidReceiptsAdapter.add(0, receipt);
+            Util.setListViewHeightBasedOnChildren(mPaidReceiptsListView);
+        }
+        else {
+            mPendingReceiptsAdapter.add(0, receipt);
+            Util.setListViewHeightBasedOnChildren(mPendingReceiptsListView);
+        }
     }
 
     private void initializeAdapters(List<Receipt> receiptList){
@@ -116,10 +120,28 @@ public class ReceiptsListFragment extends Fragment implements ReceiptsGet.Receip
                 mPendingReceiptsAdapter.add(r);
             }
         }
-        Util.setListViewHeightBasedOnChildren(mPaidReceiptsListView);
-        Util.setListViewHeightBasedOnChildren(mPendingReceiptsListView);
-        mPaidReceiptsAdapter.notifyDataSetChanged();
-        mPendingReceiptsAdapter.notifyDataSetChanged();
+        if (mPaidReceiptsAdapter.mReceiptsList.isEmpty()){
+            View v = getView();
+            if (v != null){
+                v.findViewById(R.id.no_paid_receipts_tv).setVisibility(View.VISIBLE);
+                mPaidReceiptsListView.setVisibility(View.GONE);
+            }
+        }
+        else{
+            Util.setListViewHeightBasedOnChildren(mPaidReceiptsListView);
+            mPaidReceiptsAdapter.notifyDataSetChanged();
+        }
+        if (mPendingReceiptsAdapter.mReceiptsList.isEmpty()){
+            View v = getView();
+            if (v != null){
+                v.findViewById(R.id.all_receipts_paid_tv).setVisibility(View.VISIBLE);
+                mPendingReceiptsListView.setVisibility(View.GONE);
+            }
+        }
+        else{
+            Util.setListViewHeightBasedOnChildren(mPendingReceiptsListView);
+            mPendingReceiptsAdapter.notifyDataSetChanged();
+        }
     }
 
     private void goToReceiptDetails(Receipt receipt){
@@ -195,10 +217,13 @@ public class ReceiptsListFragment extends Fragment implements ReceiptsGet.Receip
                         Receipt receipt = (Receipt) extras.getSerializable(ReceiptDetailsActivity.EXTRA_RETURN_RECEIPT_KEY);
                         if (receipt.mEverybodyHasPaid){
                             mPaidReceiptsAdapter.modify(receipt);
+                            mPendingReceiptsAdapter.delete(receipt);
                         }
                         else{
                             mPendingReceiptsAdapter.modify(receipt);
                         }
+                        Util.setListViewHeightBasedOnChildren(mPaidReceiptsListView);
+                        Util.setListViewHeightBasedOnChildren(mPendingReceiptsListView);
                     }
                 }
             }
@@ -208,6 +233,8 @@ public class ReceiptsListFragment extends Fragment implements ReceiptsGet.Receip
                     Receipt receiptToDelete = (Receipt) extras.getSerializable(ReceiptDetailsActivity.EXTRA_RETURN_RECEIPT_KEY);
                     mPendingReceiptsAdapter.delete(receiptToDelete);
                     mPaidReceiptsAdapter.delete(receiptToDelete);
+                    Util.setListViewHeightBasedOnChildren(mPaidReceiptsListView);
+                    Util.setListViewHeightBasedOnChildren(mPendingReceiptsListView);
                 }
             }
         }

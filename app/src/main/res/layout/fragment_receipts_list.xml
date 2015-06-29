@@ -6,7 +6,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
+        <com.uma.tfg.appartment.views.TypefacedTextView
+            android:textStyle="bold"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/empty_receipts_list_tv"
@@ -29,35 +30,44 @@
             android:visibility="gone"
             android:id="@+id/receipts_lists_layout_wrapper">
 
-            <TextView
-                android:id="@+id/tv_group_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:id="@+id/pending_receipts_linear_layout">
 
-                <TextView
+                <com.uma.tfg.appartment.views.TypefacedTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:textSize="24sp"
                     android:text="Recibos pendientes"/>
                 <ListView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/pending_receipts_lv"/>
-
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/all_receipts_paid_tv"
+                    android:gravity="center_horizontal"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="¡Enhorabuena, has pagado todos tus recibos!"/>
             </LinearLayout>
 
             <LinearLayout
+                android:layout_marginBottom="50dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:id="@+id/paid_receipts_linear_layout">
 
-                <TextView
+                <com.uma.tfg.appartment.views.TypefacedTextView
+                    android:textStyle="bold"
+                    android:gravity="center_horizontal"
+                    android:textSize="24sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Recibos pagados"/>
@@ -65,21 +75,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/paid_receipts_lv"/>
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/no_paid_receipts_tv"
+                    android:gravity="center_horizontal"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Por ahora no tienes ningún recibo pagado"/>
             </LinearLayout>
         </LinearLayout>
-        <!--<RelativeLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:gravity="end">-->
-            <!--<com.getbase.floatingactionbutton.FloatingActionButton-->
-                <!--android:id="@+id/create_new_receipt_button"-->
-                <!--fab:fab_icon="@mipmap/ic_add_white_48dp"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_alignParentBottom="true"-->
-                <!--android:layout_centerHorizontal="true"-->
-                <!--android:layout_marginBottom="16dp"-->
-                <!--/>-->
-        <!--</RelativeLayout>-->
     </FrameLayout>
 </ScrollView>

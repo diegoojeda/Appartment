@@ -80,16 +80,15 @@ public class CreateGroupActivity extends Activity implements GroupsPost.GroupsPo
 
     private void onFinishActionPressed() {
         if (mGroupNameEditText.length() == 0){
-            Toast.makeText(this, "El nombre del grupo no puede ser vacío", Toast.LENGTH_SHORT).show();
+            Util.toast(this, "El nombre del grupo no puede ser vacío");
         }
         else {
             if (mMultiEmailAdderView.validateAllEmails()) {
                 mEmailsList = mMultiEmailAdderView.getEmailList();
                 mGroupName = mGroupNameEditText.getText().toString();
                 createGroupOnServer();
-
             } else {
-                Toast.makeText(this, "Hay algún E-mail inválido, revísalos", Toast.LENGTH_SHORT).show();
+                Util.toast(this, "Hay algún E-mail inválido, revísalos");
             }
         }
     }

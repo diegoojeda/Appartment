@@ -1,6 +1,7 @@
 package com.uma.tfg.appartment.views;
 
 import android.content.Context;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -75,6 +76,7 @@ public class MultiEmailAdderView extends LinearLayout implements View.OnClickLis
     private void addOneMoreFieldToEmailFieldsList() {
         final FormEditText fet = new FormEditText(getContext());
         fet.addValidator(new EmailValidator());
+        fet.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
 
         fet.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override

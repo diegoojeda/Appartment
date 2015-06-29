@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.uma.tfg.appartment.activities.InviteActivity">
+
+    <item android:id="@+id/action_invite"
+        android:title="Invitar"
+        android:showAsAction="always|withText" />
+</menu>

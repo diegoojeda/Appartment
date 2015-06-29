@@ -67,10 +67,15 @@ public class ReceiptsListAdapter extends BaseAdapter{
     }
 
     public void modify(Receipt receipt){
+        boolean modified = false;
         for (int i = 0; i<mReceiptsList.size(); i++){
             if (mReceiptsList.get(i).mId.equals(receipt.mId)){
+                modified = true;
                 mReceiptsList.set(i, receipt);
             }
+        }
+        if (!modified){
+            add(receipt);
         }
         notifyDataSetChanged();
     }

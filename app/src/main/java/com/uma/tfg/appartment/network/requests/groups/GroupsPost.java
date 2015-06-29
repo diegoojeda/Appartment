@@ -82,8 +82,7 @@ public class GroupsPost extends PostRequest {
                 break;
             case INVITE:
                 //TODO
-                JSONArray emailsArray = new JSONArray(mEmails);
-                parameters.add(new BasicNameValuePair("emails", emailsArray.toString()));
+                    parameters.add(new BasicNameValuePair("emails", new JSONArray(mEmails).toString()));
                 break;
             case UPDATE:
                 //TODO
