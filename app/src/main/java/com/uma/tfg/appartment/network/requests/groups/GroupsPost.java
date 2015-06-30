@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+// ADD NEWMEMBER -> 'http://appartment-pruebamarja.rhcloud.com/group/id_grupo(sacado de referee)/?session_id=234434234324' Y action => update Y type => umember
 // INSERT GROUP -> 'http://appartment-pruebamarja.rhcloud.com/group/?session_id=234434234324' action => insert Y name
 // UPDATE GROUP -> 'http://appartment-pruebamarja.rhcloud.com/group/group_id?session_id=234434234324' Y action => update Y name => nombre nuevo
 // INVITE GROUP -> 'http://appartment-pruebamarja.rhcloud.com/group/group_id?session_id=234434234324'  Y action => invite Y emails => array()
@@ -24,6 +25,21 @@ public class GroupsPost extends PostRequest {
     public interface GroupsPostListener{
         void onGroupsPostSuccess(GroupsPostAction action, Group modifiedGroup);
         void onGroupsPostError();
+    }
+
+    public enum GroupUpdateType {
+        UMEMBER("umember"),
+        DMEMBER("dmember");
+
+        private String type;
+
+        GroupUpdateType(String type){
+            this.type = type;
+        }
+
+        public String toString() {
+            return this.type;
+        }
     }
 
     public enum GroupsPostAction {
@@ -43,26 +59,8 @@ public class GroupsPost extends PostRequest {
         }
     }
 
-//TODO Por ahora no se usa
-//
-//    public enum GroupsUpdate {
-//
-//        GROUP("group"),
-//        //TODO
-//        GROUP_MEMBERS("");
-//
-//        private String type;
-//
-//        GroupsUpdate(String type){
-//            this.type = type;
-//        }
-//
-//        public String toString() {
-//            return type;
-//        }
-//    }
-
     private GroupsPostAction mAction;
+    public GroupUpdateType mUpdateType;
     public String mName;
     public String mId;
     public List<String> mEmails;
@@ -71,6 +69,11 @@ public class GroupsPost extends PostRequest {
 
     public GroupsPost(GroupsPostAction action){
         this.mAction = action;
+    }
+
+    public GroupsPost(GroupUpdateType type) {
+        this.mAction = GroupsPostAction.UPDATE;
+        this.mUpdateType = type;
     }
 
     @Override
@@ -82,10 +85,13 @@ public class GroupsPost extends PostRequest {
                 break;
             case INVITE:
                 //TODO
-                    parameters.add(new BasicNameValuePair("emails", new JSONArray(mEmails).toString()));
+
+                parameters.add(new BasicNameValuePair("emails", new JSONArray(mEmails).toString()));
                 break;
             case UPDATE:
-                //TODO
+                if (mUpdateType == GroupUpdateType.UMEMBER || mUpdateType == GroupUpdateType.DMEMBER){
+                    parameters.add(new BasicNameValuePair("type", mUpdateType.toString()));
+                }
                 break;
         }
         return parameters;

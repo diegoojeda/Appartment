@@ -108,10 +108,10 @@ public class CreateReceiptActivity extends Activity implements ReceiptsPost.Rece
     private void sendCreateReceiptRequest() {
         showProgressDialog();
         RequestsBuilder.sendCreateReceiptRequest(
-                mFullGroup.mId, Double.parseDouble(mReceiptQuantityEditText.getText().toString()),
-                getDebtorsList(),
-                mReceiptNameEditText.getText().toString(),
-                this
+            mFullGroup.mId, Double.parseDouble(mReceiptQuantityEditText.getText().toString()),
+            getDebtorsList(),
+            mReceiptNameEditText.getText().toString(),
+            this
         );
     }
 
@@ -126,9 +126,6 @@ public class CreateReceiptActivity extends Activity implements ReceiptsPost.Rece
     private void onCreateReceiptActionTaken() {
         if (validateFields()){
             sendCreateReceiptRequest();
-        }
-        else{
-
         }
     }
 

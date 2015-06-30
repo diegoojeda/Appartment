@@ -91,4 +91,20 @@ public class RequestsBuilder {
 
         RequestsManager.getInstance().queueRequest(request);
     }
+
+    public static void sendAddNewMemberToGroupRequest(String groupId, GroupsPost.GroupsPostListener listener){
+        GroupsPost request = new GroupsPost(GroupsPost.GroupUpdateType.UMEMBER);
+        request.mId = groupId;
+        request.mListener = listener;
+
+        RequestsManager.getInstance().queueRequest(request);
+    }
+
+    public static void sendLeaveGroupRequest(String groupId, GroupsPost.GroupsPostListener listener){
+        GroupsPost request = new GroupsPost(GroupsPost.GroupUpdateType.DMEMBER);
+        request.mId = groupId;
+        request.mListener = listener;
+
+        RequestsManager.getInstance().queueRequest(request);
+    }
 }

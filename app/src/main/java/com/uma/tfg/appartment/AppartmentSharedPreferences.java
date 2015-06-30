@@ -76,4 +76,16 @@ public class AppartmentSharedPreferences {
     public static boolean isUserLoggedIn() {
         return getUserEmail() != null && getUserId() != null && getUserName() != null;
     }
+
+    public static void setInstallReferrer(String referrer){
+        SharedPreferences prefs = mContext.getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("referrer", referrer);
+        editor.apply();
+    }
+
+    public static String getInstallReferrer(){
+        SharedPreferences prefs = mContext.getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+        return prefs.getString("referrer", null);
+    }
 }

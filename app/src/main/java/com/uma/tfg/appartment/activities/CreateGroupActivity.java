@@ -7,9 +7,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
+import com.uma.tfg.appartment.AppartmentSharedPreferences;
 import com.uma.tfg.appartment.R;
 import com.uma.tfg.appartment.model.Group;
 import com.uma.tfg.appartment.network.management.RequestsBuilder;
@@ -128,13 +127,20 @@ public class CreateGroupActivity extends Activity implements GroupsPost.GroupsPo
     @Override
     public void onGroupsPostSuccess(GroupsPost.GroupsPostAction action, Group modifiedGroup) {
         hideLoadingDialog();
-        Util.toast(this, "Grupo creado correctamente");
-        Intent resultData = new Intent();
-        resultData.putExtra(EXTRA_GROUP_RESULT, modifiedGroup);
-//        resultData.putExtra(EXTRA_GROUP_NAME_RESULT, mGroupName);
-//        resultData.putStringArrayListExtra(EXTRA_EMAIL_LIST_RESULT, new ArrayList<>(mEmailsList));
-        setResult(RESULT_OK, resultData);
-        finish();
+        if (action == GroupsPost.GroupsPostAction.INSERT) {
+            mGroupToReturn = modifiedGroup;
+            inviteFriendsToCreatedGroup(mGroupToReturn);
+        }
+        else if (action == GroupsPost.GroupsPostAction.INVITE){
+            Util.toast(this, "Grupo creado correctamente");
+            Intent resultData = new Intent();
+            resultData.putExtra(EXTRA_GROUP_RESULT, mGroupToReturn);
+            setResult(RESULT_OK, resultData);
+            finish();
+        }
+        else{
+            Logger.e("Error en GroupsPost");
+        }
     }
 
     @Override
@@ -142,6 +148,12 @@ public class CreateGroupActivity extends Activity implements GroupsPost.GroupsPo
         hideLoadingDialog();
         Util.toast(this, "Hubo un error al crear el grupo");
         Logger.e("Error al crear el grupo en el servidor");
+    }
+
+    private void inviteFriendsToCreatedGroup(Group createdGroup) {
+        showLoadingDialog("Invitando amigos…");
+//        mEmailsList.add(AppartmentSharedPreferences.getUserEmail());
+        RequestsBuilder.sendInviteToGroupRequest(createdGroup.mId, mEmailsList, this);
     }
 
     private void showLoadingDialog(String message) {

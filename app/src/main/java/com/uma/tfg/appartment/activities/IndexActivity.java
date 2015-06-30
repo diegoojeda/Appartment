@@ -1,22 +1,25 @@
 package com.uma.tfg.appartment.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.hudomju.swipe.SwipeToDismissTouchListener;
 import com.hudomju.swipe.adapter.ListViewAdapter;
+import com.uma.tfg.appartment.AppartmentSharedPreferences;
 import com.uma.tfg.appartment.R;
 import com.uma.tfg.appartment.adapters.GroupsListAdapter;
 import com.uma.tfg.appartment.model.Group;
 import com.uma.tfg.appartment.network.management.RequestsBuilder;
-import com.uma.tfg.appartment.network.management.RequestsManager;
 import com.uma.tfg.appartment.network.requests.groups.GroupsGet;
 import com.uma.tfg.appartment.network.requests.groups.GroupsPost;
 import com.uma.tfg.appartment.util.Logger;
@@ -45,6 +48,9 @@ public class IndexActivity extends Activity implements View.OnClickListener, Gro
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_index);
         initViews();
+//        if (AppartmentSharedPreferences.getInstallReferrer() != null){
+//            Logger.d("Recibido referrer!! " + AppartmentSharedPreferences.getInstallReferrer());
+//        }
         if (savedInstanceState != null){
             if (savedInstanceState.containsKey(KEY_SAVE_GROUPS_LIST)){
                 mGroupsListAdapter.mGroupsList = (ArrayList) savedInstanceState.getSerializable(KEY_SAVE_GROUPS_LIST);
@@ -57,7 +63,24 @@ public class IndexActivity extends Activity implements View.OnClickListener, Gro
     }
 
     private void loadUserGroups() {
-        RequestsBuilder.sendGroupsGetRequest(this);
+        if (AppartmentSharedPreferences.getInstallReferrer() != null){
+            String groupId = AppartmentSharedPreferences.getInstallReferrer();
+            RequestsBuilder.sendAddNewMemberToGroupRequest(groupId, new GroupsPost.GroupsPostListener() {
+                @Override
+                public void onGroupsPostSuccess(GroupsPost.GroupsPostAction action, Group modifiedGroup) {
+                    RequestsBuilder.sendGroupsGetRequest(IndexActivity.this);
+                }
+
+                @Override
+                public void onGroupsPostError() {
+                    Logger.e("Error al añadir un usuario a un grupo nuevo");
+                }
+            });
+            AppartmentSharedPreferences.setInstallReferrer(null);
+        }
+        else{
+            RequestsBuilder.sendGroupsGetRequest(this);
+        }
     }
 
     private void initViews() {
@@ -111,35 +134,63 @@ public class IndexActivity extends Activity implements View.OnClickListener, Gro
     }
 
     private void setOnGroupClickedListener() {
-        final SwipeToDismissTouchListener<ListViewAdapter> touchListener = new SwipeToDismissTouchListener<>(
-            new ListViewAdapter(mMyGroupsListView),
-            new SwipeToDismissTouchListener.DismissCallbacks<ListViewAdapter>() {
-                @Override
-                public boolean canDismiss(int position) {
-                    return true;
-                }
 
-                @Override
-                public void onDismiss(ListViewAdapter view, int position) {
-                    RequestsBuilder.sendDeleteGroupRequest(mGroupsListAdapter.mGroupsList.get(position).mId, IndexActivity.this);
-                    mGroupsListAdapter.remove(position);
-                    if (mGroupsListAdapter.mGroupsList.isEmpty()){
-                        showEmptyGroupsListLayout();
-                    }
-                }
-            });
-        mMyGroupsListView.setOnTouchListener(touchListener);
-        mMyGroupsListView.setOnScrollListener((AbsListView.OnScrollListener) touchListener.makeScrollListener());
+        mMyGroupsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                showGroupActionsDialog(i);
+                return true;
+            }
+        });
+
         mMyGroupsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (touchListener.existPendingDismisses()) {
-                    touchListener.undoPendingDismiss();
-                } else {
-                    goToGroupDetailsActivity(mGroupsListAdapter.mGroupsList.get(position));
+                goToGroupDetailsActivity(mGroupsListAdapter.mGroupsList.get(position));
+            }
+        });
+    }
+
+    private void showGroupActionsDialog(final int groupPosition) {
+        AlertDialog.Builder groupActionsDialog = new AlertDialog.Builder(IndexActivity.this);
+        groupActionsDialog.setTitle("¿Qué deseas hacer?");
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(IndexActivity.this,
+                android.R.layout.simple_list_item_1);
+        arrayAdapter.add("Abandonar grupo");
+        arrayAdapter.add("Eliminar grupo");
+
+        groupActionsDialog.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+                        //Abandonar grupo
+                        leaveGroupInPosition(groupPosition);
+                        break;
+                    case 1:
+                        //Eliminar grupo
+                        deleteGroupInPosition(groupPosition);
+                        break;
                 }
             }
         });
+        groupActionsDialog.show();
+    }
+
+    private void deleteGroupInPosition(int position){
+        RequestsBuilder.sendDeleteGroupRequest(mGroupsListAdapter.mGroupsList.get(position).mId, IndexActivity.this);
+        mGroupsListAdapter.remove(position);
+        if (mGroupsListAdapter.mGroupsList.isEmpty()){
+            showEmptyGroupsListLayout();
+        }
+    }
+
+    private void leaveGroupInPosition(int position){
+        RequestsBuilder.sendLeaveGroupRequest(mGroupsListAdapter.mGroupsList.get(position).mId, IndexActivity.this);
+        mGroupsListAdapter.remove(position);
+        if (mGroupsListAdapter.mGroupsList.isEmpty()){
+            showEmptyGroupsListLayout();
+        }
     }
 
     private void goToGroupDetailsActivity(Group selectedGroup){

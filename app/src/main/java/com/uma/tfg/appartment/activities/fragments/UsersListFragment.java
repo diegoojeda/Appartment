@@ -6,15 +6,13 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 
 import com.uma.tfg.appartment.R;
 import com.uma.tfg.appartment.adapters.UsersListAdapter;
 import com.uma.tfg.appartment.model.Group;
 
-public class UsersListFragment extends Fragment {
+public class UsersListFragment extends Fragment{
 
     private static final String EXTRA_GROUP = "UsersListFragment.Group";
 

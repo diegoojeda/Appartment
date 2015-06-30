@@ -2,10 +2,8 @@ package com.uma.tfg.appartment.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.uma.tfg.appartment.R;
 import com.uma.tfg.appartment.model.Group;
@@ -115,10 +113,12 @@ public class InviteActivity extends Activity implements GroupsPost.GroupsPostLis
     @Override
     public void onGroupsPostSuccess(GroupsPost.GroupsPostAction action, Group modifiedGroup) {
         Logger.d("Invitado con éxito");
+        finish();
     }
 
     @Override
     public void onGroupsPostError() {
+        Util.toast(this, "Hubo un error al invitar a tus contactos al grupo");
         Logger.e("Error al invitar");
     }
 }
