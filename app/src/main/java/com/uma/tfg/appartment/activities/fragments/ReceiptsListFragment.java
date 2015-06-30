@@ -83,15 +83,13 @@ public class ReceiptsListFragment extends Fragment implements ReceiptsGet.Receip
     }
 
     public void addNewReceipt(Receipt receipt){
-        hideEmptyReceiptsListInformation();
         if (receipt.mEverybodyHasPaid){
             mPaidReceiptsAdapter.add(0, receipt);
-            Util.setListViewHeightBasedOnChildren(mPaidReceiptsListView);
         }
         else {
             mPendingReceiptsAdapter.add(0, receipt);
-            Util.setListViewHeightBasedOnChildren(mPendingReceiptsListView);
         }
+        modifyViewsWhenReceiptsChange();
     }
 
     private void initializeAdapters(List<Receipt> receiptList){
@@ -120,28 +118,7 @@ public class ReceiptsListFragment extends Fragment implements ReceiptsGet.Receip
                 mPendingReceiptsAdapter.add(r);
             }
         }
-        if (mPaidReceiptsAdapter.mReceiptsList.isEmpty()){
-            View v = getView();
-            if (v != null){
-                v.findViewById(R.id.no_paid_receipts_tv).setVisibility(View.VISIBLE);
-                mPaidReceiptsListView.setVisibility(View.GONE);
-            }
-        }
-        else{
-            Util.setListViewHeightBasedOnChildren(mPaidReceiptsListView);
-            mPaidReceiptsAdapter.notifyDataSetChanged();
-        }
-        if (mPendingReceiptsAdapter.mReceiptsList.isEmpty()){
-            View v = getView();
-            if (v != null){
-                v.findViewById(R.id.all_receipts_paid_tv).setVisibility(View.VISIBLE);
-                mPendingReceiptsListView.setVisibility(View.GONE);
-            }
-        }
-        else{
-            Util.setListViewHeightBasedOnChildren(mPendingReceiptsListView);
-            mPendingReceiptsAdapter.notifyDataSetChanged();
-        }
+        modifyViewsWhenReceiptsChange();
     }
 
     private void goToReceiptDetails(Receipt receipt){
@@ -174,12 +151,7 @@ public class ReceiptsListFragment extends Fragment implements ReceiptsGet.Receip
     @Override
     public void onReceiptsGet(List<Receipt> receipts) {
         hideLoadingReceiptsSpinnerAndShowLists();
-        if (receipts.isEmpty()){
-            showEmptyReceiptsListInformation();
-        }
-        else {
-            initializeAdapters(receipts);
-        }
+        initializeAdapters(receipts);
     }
 
     @Override
@@ -222,8 +194,7 @@ public class ReceiptsListFragment extends Fragment implements ReceiptsGet.Receip
                         else{
                             mPendingReceiptsAdapter.modify(receipt);
                         }
-                        Util.setListViewHeightBasedOnChildren(mPaidReceiptsListView);
-                        Util.setListViewHeightBasedOnChildren(mPendingReceiptsListView);
+                        modifyViewsWhenReceiptsChange();
                     }
                 }
             }
@@ -233,8 +204,7 @@ public class ReceiptsListFragment extends Fragment implements ReceiptsGet.Receip
                     Receipt receiptToDelete = (Receipt) extras.getSerializable(ReceiptDetailsActivity.EXTRA_RETURN_RECEIPT_KEY);
                     mPendingReceiptsAdapter.delete(receiptToDelete);
                     mPaidReceiptsAdapter.delete(receiptToDelete);
-                    Util.setListViewHeightBasedOnChildren(mPaidReceiptsListView);
-                    Util.setListViewHeightBasedOnChildren(mPendingReceiptsListView);
+                    modifyViewsWhenReceiptsChange();
                 }
             }
         }
@@ -243,25 +213,42 @@ public class ReceiptsListFragment extends Fragment implements ReceiptsGet.Receip
         }
     }
 
-    private void showEmptyReceiptsListInformation() {
-        View v = getView();
-        if (v != null) {
-            v.findViewById(R.id.empty_receipts_list_tv).setVisibility(View.VISIBLE);
-            v.findViewById(R.id.receipts_lists_layout_wrapper).setVisibility(View.GONE);
-        }
-    }
-
-    private void hideEmptyReceiptsListInformation() {
-        View v = getView();
-        if (v != null) {
-            v.findViewById(R.id.empty_receipts_list_tv).setVisibility(View.GONE);
-            v.findViewById(R.id.receipts_lists_layout_wrapper).setVisibility(View.VISIBLE);
-        }
-    }
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(SAVE_GROUP, mGroup);
+    }
+
+    private void modifyViewsWhenReceiptsChange() {
+        View v = getView();
+        if (v != null) {
+            if (mPendingReceiptsAdapter.mReceiptsList.isEmpty() && mPaidReceiptsAdapter.mReceiptsList.isEmpty()) {
+                //Mostrar typefacetextview vista vacía
+                v.findViewById(R.id.empty_receipts_list_tv).setVisibility(View.VISIBLE);
+                v.findViewById(R.id.receipts_lists_layout_wrapper).setVisibility(View.GONE);
+            } else {
+                //Mostrar información en cada lista
+                v.findViewById(R.id.empty_receipts_list_tv).setVisibility(View.GONE);
+                v.findViewById(R.id.receipts_lists_layout_wrapper).setVisibility(View.VISIBLE);
+
+                if (mPendingReceiptsAdapter.mReceiptsList.isEmpty()) {
+                    v.findViewById(R.id.all_receipts_paid_tv).setVisibility(View.VISIBLE);
+                    mPendingReceiptsListView.setVisibility(View.GONE);
+                } else {
+                    v.findViewById(R.id.all_receipts_paid_tv).setVisibility(View.GONE);
+                    mPendingReceiptsListView.setVisibility(View.VISIBLE);
+                }
+
+                if (mPaidReceiptsAdapter.mReceiptsList.isEmpty()) {
+                    v.findViewById(R.id.no_paid_receipts_tv).setVisibility(View.VISIBLE);
+                    mPaidReceiptsListView.setVisibility(View.GONE);
+                } else {
+                    v.findViewById(R.id.no_paid_receipts_tv).setVisibility(View.GONE);
+                    mPaidReceiptsListView.setVisibility(View.VISIBLE);
+                }
+                Util.setListViewHeightBasedOnChildren(mPaidReceiptsListView);
+                Util.setListViewHeightBasedOnChildren(mPendingReceiptsListView);
+            }
+        }
     }
 }

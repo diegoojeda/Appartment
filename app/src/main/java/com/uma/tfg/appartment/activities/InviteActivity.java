@@ -113,12 +113,13 @@ public class InviteActivity extends Activity implements GroupsPost.GroupsPostLis
     @Override
     public void onGroupsPostSuccess(GroupsPost.GroupsPostAction action, Group modifiedGroup) {
         Logger.d("Invitado con éxito");
+        Util.toast(this, "¡Amigos invitados con éxito!");
         finish();
     }
 
     @Override
     public void onGroupsPostError() {
-        Util.toast(this, "Hubo un error al invitar a tus contactos al grupo");
+        Util.toast(this, "Hubo un error al invitar a tus amigos al grupo");
         Logger.e("Error al invitar");
     }
 }
